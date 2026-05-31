@@ -50,7 +50,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#070b12] px-4 py-8">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 p-6 sm:p-8 relative overflow-hidden select-none">
+      <div className={`w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 p-6 sm:p-8 relative overflow-hidden ${DEV_MODE ? '' : 'select-none'}`}>
         
         {/* Neon style colored visual background blobs */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 dark:bg-cyan-500/10 rounded-full blur-3xl -z-10" />
@@ -184,7 +184,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
               className="w-full mt-2 py-3.5 rounded-2xl font-semibold text-sm text-white tiktok-gradient-primary shadow-lg shadow-rose-500/20 hover:shadow-rose-500/30 hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500/20"
             >
               <LogIn size={16} />
-              <span>{loading ? 'Entering Stream Room...' : 'Sign In as TikTok Host'}</span>
+              <span>{loading ? 'Entering Stream Room...' : 'Sign In as Live Host'}</span>
             </button>
 
             {/* Optional social login button */}
@@ -226,7 +226,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
         {/* Footer Toggle Navigate link */}
         <div className="mt-8 text-center bg-slate-50 dark:bg-slate-950/60 -mx-6 -mb-6 p-4 border-t border-slate-100 dark:border-slate-900 rounded-b-[2.5rem]">
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            New TikTok Host streamer?{' '}
+            Don't have an account?{' '}
             <button
               id="login-go-to-register"
               onClick={onNavigateToRegister}

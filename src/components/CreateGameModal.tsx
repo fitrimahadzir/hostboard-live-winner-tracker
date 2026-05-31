@@ -10,12 +10,11 @@ interface CreateGameModalProps {
 }
 
 const GAME_TYPES: GameType[] = [
-  'Odd One Out',
+  'Puzzle',
+  'Arcade',
   'Word Guess',
   'Quiz',
-  'Lucky Draw',
-  'Number Hunt',
-  'Custom',
+  'Other',
 ];
 
 export const CreateGameModal: React.FC<CreateGameModalProps> = ({
@@ -24,7 +23,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({
   onCreate,
 }) => {
   const [title, setTitle] = useState('');
-  const [gameType, setGameType] = useState<GameType>('Odd One Out');
+  const [gameType, setGameType] = useState<GameType>('Puzzle');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +34,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({
     try {
       await onCreate(title.trim(), gameType);
       setTitle('');
-      setGameType('Odd One Out');
+      setGameType('Puzzle');
       onClose();
     } catch (err) {
       console.error(err);
@@ -111,7 +110,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({
               {/* Game Type Picker */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                  Game Mode Selection
+                  Game Type Selection
                 </label>
                 <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto no-scrollbar pr-1">
                   {GAME_TYPES.map((type) => (

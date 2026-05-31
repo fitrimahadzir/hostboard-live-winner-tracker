@@ -120,7 +120,7 @@ export const WinnerModal: React.FC<WinnerModalProps> = ({
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
                   <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    TikTok Username
+                    Winner Username
                   </label>
                   <span className="text-[10px] text-slate-400">@ gets stripped automatically</span>
                 </div>

@@ -76,13 +76,13 @@ export const ActivityTab: React.FC = () => {
     
     if (type === 'wins') {
       title = `@Player_X scored +3 wins!`;
-      meta = { game_title: 'Odd One Out', player_name: 'Player_X', wins: 3 };
+      meta = { game_title: 'Puzzle', player_name: 'Player_X', wins: 3 };
     } else if (type === 'game_created') {
-      title = 'New game "Lucky Draw Round" was started';
-      meta = { game_title: 'Lucky Draw Round', game_type: 'Lucky Draw' };
+      title = 'New game "Arcade Round" was started';
+      meta = { game_title: 'Arcade Round', game_type: 'Arcade' };
     } else if (type === 'score_updated') {
-      title = "Adjusted @TiktokChamp's score to 12 wins";
-      meta = { player_name: 'TiktokChamp', wins: 12 };
+      title = "Adjusted @StreamChamp's score to 12 wins";
+      meta = { player_name: 'StreamChamp', wins: 12 };
     } else {
       title = 'HostBoard engine connected to cloud';
       meta = {};

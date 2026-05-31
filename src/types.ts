@@ -39,12 +39,11 @@ export interface ActivityLog {
 }
 
 export type GameType = 
-  | 'Odd One Out' 
+  | 'Puzzle' 
+  | 'Arcade' 
   | 'Word Guess' 
   | 'Quiz' 
-  | 'Lucky Draw' 
-  | 'Number Hunt' 
-  | 'Custom';
+  | 'Other';
 
 export interface AppState {
   theme: 'light' | 'dark';

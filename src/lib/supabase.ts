@@ -181,7 +181,7 @@ export const dbService = {
           user: {
             id: data.user.id,
             email: data.user.email || '',
-            username: profile?.username || data.user.user_metadata?.username || 'TikTok Host',
+            username: profile?.username || data.user.user_metadata?.username || 'Live Host',
             avatar_url: profile?.avatar_url || data.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${data.user.id}`
           }
         };
@@ -230,7 +230,7 @@ export const dbService = {
         return {
           id: session.user.id,
           email: session.user.email || '',
-          username: profile?.username || session.user.user_metadata?.username || 'TikTok Host',
+          username: profile?.username || session.user.user_metadata?.username || 'Live Host',
           avatar_url: profile?.avatar_url || session.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${session.user.id}`
         };
       } else {
@@ -379,7 +379,7 @@ export const dbService = {
     },
 
     async addWinner(gameId: string, usernameRaw: string, winAmount: number): Promise<Player> {
-      const username = usernameRaw.trim().replace(/^@/, ''); // automatically remove leading @ prefix if TikTokers paste it
+      const username = usernameRaw.trim().replace(/^@/, ''); // automatically remove leading @ prefix
       
       if (isSupabaseConfigured && supabase) {
         // Query to see if player already exists in this game

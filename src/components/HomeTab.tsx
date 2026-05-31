@@ -35,7 +35,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
               {statusBadge}
             </span>
             <h1 className="text-xl font-bold tracking-tight mt-3 text-white">
-              Welcome back, @{user?.username || 'TikTok Host'}!
+              Welcome back, @{user?.username || 'Host'}!
             </h1>
             <p className="text-xs text-rose-100/70 mt-1 max-w-[245px] sm:max-w-none">
               Track wins, declare champions, and feed real-time OBS graphics in one click.
@@ -66,7 +66,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
               Start New Live Round
             </h4>
             <p className="text-[10px] text-slate-400 dark:text-slate-500">
-              Launch Odd One Out, word guess or custom metrics
+              Launch Puzzle, word guess or arcade
             </p>
           </div>
         </div>

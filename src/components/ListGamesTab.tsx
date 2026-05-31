@@ -8,7 +8,7 @@ interface ListGamesTabProps {
   onRequestCreateGame: () => void;
 }
 
-const TYPE_FILTERS = ['All', 'Odd One Out', 'Word Guess', 'Quiz', 'Lucky Draw', 'Number Hunt', 'Custom'];
+const TYPE_FILTERS = ['All', 'Puzzle', 'Arcade', 'Word Guess', 'Quiz', 'Other'];
 
 export const ListGamesTab: React.FC<ListGamesTabProps> = ({
   onSelectGame,

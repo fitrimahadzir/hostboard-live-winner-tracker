@@ -70,7 +70,7 @@ export const ProfileTab: React.FC = () => {
           Host Profile
         </h2>
         <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-          Manage your TikTok host settings, display styles, and reports
+          Manage your host settings, display styles, and reports
         </p>
       </div>
 
@@ -90,7 +90,7 @@ export const ProfileTab: React.FC = () => {
             </h3>
             <p className="text-xs text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1.5 mt-1">
               <Mail size={13} />
-              <span className="truncate">{user?.email || 'host@tiktok.com'}</span>
+              <span className="truncate">{user?.email || 'host@stream.com'}</span>
             </p>
           </div>
         </div>

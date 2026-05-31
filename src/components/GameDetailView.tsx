@@ -30,6 +30,7 @@ export const GameDetailView: React.FC<GameDetailViewProps> = ({
   const [editingScore, setEditingScore] = useState<number>(0);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showOverlayLinks, setShowOverlayLinks] = useState(false);
 
   // Load and subscribe to updates
   useEffect(() => {
@@ -154,69 +155,53 @@ export const GameDetailView: React.FC<GameDetailViewProps> = ({
       </div>
 
       {/* STICKY CARD OVERVIEW */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] p-5 shadow-sm space-y-4">
+      <div className="tiktok-gradient-primary rounded-[2rem] p-5 shadow-xl shadow-rose-500/25 space-y-4">
         <div className="flex justify-between items-start">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/20 border border-rose-100/30 px-2.5 py-0.5 rounded-full inline-block">
+            <span className="text-[10px] uppercase font-bold text-white bg-white/20 border border-white/20 px-2.5 py-0.5 rounded-full inline-block backdrop-blur-sm">
               {currentTournament.game_type}
             </span>
-            <h2 className="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">
+            <h2 className="text-lg font-extrabold text-white leading-snug drop-shadow-sm">
               {currentTournament.title}
             </h2>
           </div>
         </div>
 
         {/* STATS MATRIX SECTION */}
-        <div className="grid grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl border border-slate-100/60 dark:border-slate-900/50">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 shrink-0">
-              <Users size={14} />
-            </div>
-            <div>
-              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Players</p>
-              <p className="text-sm font-bold font-mono text-slate-800 dark:text-slate-200">{totalPlayers}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5 border-l border-slate-200/50 dark:border-slate-800/50 pl-3">
-            <div className="p-1.5 rounded-lg bg-orange-50 dark:bg-orange-950/20 text-orange-500 shrink-0">
-              <Trophy size={14} />
-            </div>
-            <div>
-              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Total Scores</p>
-              <p className="text-sm font-bold font-mono text-slate-800 dark:text-slate-200">{totalWinsAllocated}</p>
-            </div>
-          </div>
-        </div>
-
         {/* OBS OVERLAY SHARE BOX */}
-        <div className="p-3 bg-rose-50/30 dark:bg-rose-950/5 border border-rose-100/50 dark:border-rose-900/20 rounded-2xl space-y-2">
-          <div className="flex items-center justify-between text-[11px] text-slate-500">
-            <span className="font-bold flex items-center gap-1 text-slate-700 dark:text-slate-300">
-              <MonitorPlay size={13} className="text-rose-500" />
+        <div 
+          className="p-3 bg-white/10 border border-white/20 rounded-2xl cursor-pointer hover:bg-white/20 transition-colors backdrop-blur-sm"
+          onClick={() => setShowOverlayLinks(!showOverlayLinks)}
+        >
+          <div className="flex items-center justify-between text-[11px] text-white/80">
+            <span className="font-bold flex items-center gap-1 text-white">
+              <MonitorPlay size={13} />
               <span>OBS Studio Live Overlay</span>
             </span>
-            <span className="text-[10px] font-medium text-slate-400">Add as Browser Source</span>
+            <span className="text-[10px] font-medium text-white/70">{showOverlayLinks ? 'Click to hide' : 'Click to reveal'}</span>
           </div>
-          <div className="flex gap-1.5">
-            <button
-              id="lobby-copy-overlay-btn"
-              onClick={handleCopyOverlayUrl}
-              className="flex-1 py-2 bg-white dark:bg-slate-950 text-[11px] font-semibold text-rose-500 hover:text-white hover:bg-rose-500 border border-slate-200 dark:border-slate-800 rounded-xl transition-all flex items-center justify-center gap-1.5 focus:outline-none"
-            >
-              <Copy size={13} />
-              <span>{copied ? 'Copied!' : 'Copy Overlay URL'}</span>
-            </button>
-            <a
-              id="lobby-preview-overlay-btn"
-              href={overlayHref}
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-2 bg-indigo-50/50 dark:bg-indigo-950/10 text-[11px] font-semibold text-indigo-500 border border-indigo-100/50 dark:border-indigo-900/40 rounded-xl transition-colors flex items-center justify-center gap-1 focus:outline-none"
-            >
-              <ExternalLink size={13} />
-              <span>Live Test</span>
-            </a>
-          </div>
+          {showOverlayLinks && (
+            <div className="flex gap-1.5 mt-2" onClick={(e) => e.stopPropagation()}>
+              <button
+                id="lobby-copy-overlay-btn"
+                onClick={handleCopyOverlayUrl}
+                className="flex-1 py-1.5 bg-white text-[11px] font-semibold text-rose-500 hover:brightness-95 border border-transparent rounded-xl transition-all flex items-center justify-center gap-1.5 focus:outline-none shadow-sm"
+              >
+                <Copy size={13} />
+                <span>{copied ? 'Copied!' : 'Copy Overlay URL'}</span>
+              </button>
+              <a
+                id="lobby-preview-overlay-btn"
+                href={overlayHref}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-1.5 bg-white/20 text-[11px] font-semibold text-white border border-white/30 rounded-xl transition-colors hover:bg-white/30 flex items-center justify-center gap-1 focus:outline-none backdrop-blur-sm"
+              >
+                <ExternalLink size={13} />
+                <span>Live Test</span>
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
