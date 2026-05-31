@@ -29,12 +29,10 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
   };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
     try {
       await signInWithGoogle();
     } catch (err) {
       console.error(err);
-      setLoading(false); // If it throws immediately without redirect
     }
   };
 

@@ -94,6 +94,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (isSupabaseConfigured && supabase) {
               const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+                  
+                  if (window.opener && window.location.search.includes('popup=true')) {
+                    window.close();
+                    return;
+                  }
+
                   const u = await dbService.auth.getCurrentUser();
                   setUser(u);
                   if (u) {
@@ -183,20 +189,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const signInWithGoogle = async () => {
-    setLoading(true);
     try {
       if (DEV_MODE) {
+        setLoading(true);
         addToast('Google login is bypassed in Dev Mode.', 'info');
         await enterDevMode();
+        setLoading(false);
       } else {
         await dbService.auth.signInWithGoogle();
-        // Redirect happens automatically
+        // Popup opens, onAuthStateChange listener will handle closing and session set
       }
     } catch (err: any) {
       addToast(err.message || 'Failed to initialize Google login', 'error');
-      throw err;
-    } finally {
       setLoading(false);
+      throw err;
     }
   };
 

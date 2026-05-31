@@ -124,11 +124,26 @@ export const dbService = {
         const { data, error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: window.location.origin
+            skipBrowserRedirect: true,
+            redirectTo: `${window.location.origin}/?popup=true`
           }
         });
         if (error) throw error;
-        return data;
+        
+        if (data?.url) {
+          const w = 500;
+          const h = 600;
+          const left = (window.screen.width / 2) - (w / 2);
+          const top = (window.screen.height / 2) - (h / 2);
+          
+          const popup = window.open(
+            data.url,
+            'supabase-oauth',
+            `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${top}, left=${left}`
+          );
+          return popup;
+        }
+        return null;
       } else {
         throw new Error('Google Sign In is not available in sandbox mode. Please connect Supabase.');
       }
