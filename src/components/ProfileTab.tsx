@@ -64,30 +64,26 @@ export const ProfileTab: React.FC = () => {
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const MAX_WIDTH = 250;
-        const MAX_HEIGHT = 250;
-        let width = img.width;
-        let height = img.height;
+        // For a square crop, we find the shortest side
+        const size = Math.min(img.width, img.height);
+        const sourceX = (img.width - size) / 2;
+        const sourceY = (img.height - size) / 2;
 
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height;
-            height = MAX_HEIGHT;
-          }
-        }
-
+        const MAX_SIZE = 400; // Let's use 400x400 for better quality than 250
+        
         const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = MAX_SIZE;
+        canvas.height = MAX_SIZE;
 
         const ctx = canvas.getContext("2d");
         if (ctx) {
-             ctx.drawImage(img, 0, 0, width, height);
+             // Use imageSmoothingEnabled for better quality
+             ctx.imageSmoothingEnabled = true;
+             ctx.imageSmoothingQuality = 'high';
+             
+             // Draw the center square portion of the image into the square canvas
+             ctx.drawImage(img, sourceX, sourceY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
+             
              canvas.toBlob(async (blob) => {
                if (blob) {
                  const formData = new FormData();
@@ -157,13 +153,14 @@ export const ProfileTab: React.FC = () => {
       const emailHash = md5(editEmail.trim().toLowerCase());
       const gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=mp`;
 
-      const isCustomAvater = currentAvatar.startsWith('http') && 
+      const isCustomAvatar = currentAvatar && 
                              !currentAvatar.includes('gravatar.com') && 
                              !currentAvatar.includes('dicebear.com') && 
-                             !currentAvatar.includes('googleusercontent.com');
+                             !currentAvatar.includes('googleusercontent.com') &&
+                             currentAvatar !== '';
 
       // If they changed their email, and don't have a custom uploaded avatar, fall back to Gravatar
-      if (editEmail !== user?.email && !isCustomAvater) {
+      if (editEmail !== user?.email && !isCustomAvatar) {
          nextAvatarUrl = gravatarUrl;
       }
 
@@ -185,13 +182,10 @@ export const ProfileTab: React.FC = () => {
   };
 
   const currentDp =
-    user?.avatar_url &&
-    !user?.avatar_url.includes("dicebear") &&
-    !user?.avatar_url.includes("googleusercontent")
-      ? user.avatar_url
-      : user?.email
-        ? `https://www.gravatar.com/avatar/${md5((user.email as string).trim().toLowerCase())}?d=mp`
-        : `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || "profile"}`;
+    user?.avatar_url ||
+    (user?.email
+      ? `https://www.gravatar.com/avatar/${md5((user.email as string).trim().toLowerCase())}?d=mp`
+      : `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || "profile"}`);
 
   const handleExportCSV = async () => {
     const targetGameId =

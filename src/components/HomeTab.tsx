@@ -1,5 +1,6 @@
 import React from "react";
 import { useApp } from "../context/AppContext";
+import md5 from "md5";
 import {
   Trophy,
   Users,
@@ -56,7 +57,9 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             id="host-hero-avatar"
             src={
               user?.avatar_url ||
-              `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || "host"}`
+              (user?.email
+                ? `https://www.gravatar.com/avatar/${md5(user.email.trim().toLowerCase())}?d=mp`
+                : `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || "host"}`)
             }
             alt="Host Avatar"
             className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 shadow-md shrink-0 object-cover"
