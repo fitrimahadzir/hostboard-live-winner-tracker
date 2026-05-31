@@ -134,7 +134,7 @@ const GameDetailWrapper: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy-client-id-please-configure.apps.googleusercontent.com';
 
 // Root Router shell
 export default function App() {

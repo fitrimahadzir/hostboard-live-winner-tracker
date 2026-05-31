@@ -217,7 +217,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
                 onError={() => {
                   console.error('Google Login Failed');
                 }}
-                useOneTap
                 theme="outline"
                 size="large"
                 width="100%"
