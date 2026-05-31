@@ -119,6 +119,19 @@ export const dbService = {
       }
     },
 
+    async signInWithGoogleToken(idToken: string) {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: idToken,
+        });
+        if (error) throw error;
+        return data;
+      } else {
+        throw new Error('Google Sign In is not available in sandbox mode.');
+      }
+    },
+
     async signInWithGoogle() {
       if (isSupabaseConfigured && supabase) {
         const { data, error } = await supabase.auth.signInWithOAuth({

@@ -132,19 +132,25 @@ const GameDetailWrapper: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return gameId ? <GameDetailView gameId={gameId} onBack={onBack} /> : null;
 };
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+
 // Root Router shell
 export default function App() {
   return (
-    <AppProvider>
-      <HashRouter>
-        <Routes>
-          {/* Realtime Transparent OBS Window handles its own wrapper layout without margins or layout toolbars */}
-          <Route path="/overlay/:gameId" element={<OverlayPage />} />
-          
-          {/* Primary dashboards */}
-          <Route path="*" element={<MainAppContent />} />
-        </Routes>
-      </HashRouter>
-    </AppProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AppProvider>
+        <HashRouter>
+          <Routes>
+            {/* Realtime Transparent OBS Window handles its own wrapper layout without margins or layout toolbars */}
+            <Route path="/overlay/:gameId" element={<OverlayPage />} />
+            
+            {/* Primary dashboards */}
+            <Route path="*" element={<MainAppContent />} />
+          </Routes>
+        </HashRouter>
+      </AppProvider>
+    </GoogleOAuthProvider>
   );
 }

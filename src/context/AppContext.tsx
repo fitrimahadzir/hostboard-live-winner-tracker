@@ -23,6 +23,7 @@ interface AppContextType {
   toggleTheme: () => void;
   signUp: (email: string, username: string, pass: string) => Promise<void>;
   signIn: (email: string, pass: string) => Promise<void>;
+  signInWithGoogleToken: (token: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   refreshGames: () => Promise<void>;
@@ -185,6 +186,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       throw err;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const signInWithGoogleToken = async (idToken: string) => {
+    try {
+      if (DEV_MODE) {
+        setLoading(true);
+        addToast('Google login is bypassed in Dev Mode.', 'info');
+        await enterDevMode();
+        setLoading(false);
+      } else {
+        await dbService.auth.signInWithGoogleToken(idToken);
+      }
+    } catch (err: any) {
+      addToast(err.message || 'Failed to authenticate Google token', 'error');
+      setLoading(false);
+      throw err;
     }
   };
 
@@ -410,6 +428,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleTheme,
         signUp,
         signIn,
+        signInWithGoogleToken,
         signInWithGoogle,
         signOut,
         refreshGames,
