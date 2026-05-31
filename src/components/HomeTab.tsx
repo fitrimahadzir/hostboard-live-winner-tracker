@@ -1,7 +1,15 @@
-import React from 'react';
-import { useApp } from '../context/AppContext';
-import { Trophy, Users, Star, Plus, ShieldCheck, ChevronRight, PlayCircle } from 'lucide-react';
-import { Game } from '../types';
+import React from "react";
+import { useApp } from "../context/AppContext";
+import {
+  Trophy,
+  Users,
+  Star,
+  Plus,
+  ShieldCheck,
+  ChevronRight,
+  PlayCircle,
+} from "lucide-react";
+import { Game } from "../types";
 
 interface HomeTabProps {
   onSelectGame: (gameId: string) => void;
@@ -16,14 +24,16 @@ export const HomeTab: React.FC<HomeTabProps> = ({
 
   // Calculate live stats
   const totalGames = games.length;
-  
+
   // Simulated stats for nicer live representation on dashboard
-  const sampleBestPerformance = games.length > 0 ? games[0].title : "No rounds started";
-  const statusBadge = isSupabaseConnected ? 'Realtime Supabase Active' : 'Offline Local Storage Sandbox';
+  const sampleBestPerformance =
+    games.length > 0 ? games[0].title : "No rounds started";
+  const statusBadge = isSupabaseConnected
+    ? "Realtime Supabase Active"
+    : "Offline Local Storage Sandbox";
 
   return (
     <div className="space-y-6 pb-24 md:pb-6">
-      
       {/* Welcome Hero header */}
       <div className="bg-gradient-to-br from-slate-900 to-rose-950 text-white rounded-[2rem] p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none" />
@@ -35,15 +45,19 @@ export const HomeTab: React.FC<HomeTabProps> = ({
               {statusBadge}
             </span>
             <h1 className="text-xl font-bold tracking-tight mt-3 text-white">
-              Welcome back, @{user?.username || 'Host'}!
+              Welcome back, {user?.username || "Host"}!
             </h1>
             <p className="text-xs text-rose-100/70 mt-1 max-w-[245px] sm:max-w-none">
-              Track wins, declare champions, and feed real-time OBS graphics in one click.
+              Track wins, declare champions, and feed real-time OBS graphics in
+              one click.
             </p>
           </div>
           <img
             id="host-hero-avatar"
-            src={user?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || 'host'}`}
+            src={
+              user?.avatar_url ||
+              `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id || "host"}`
+            }
             alt="Host Avatar"
             className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 shadow-md shrink-0 object-cover"
             referrerPolicy="no-referrer"
@@ -70,12 +84,14 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             </p>
           </div>
         </div>
-        <ChevronRight size={18} className="text-slate-300 group-hover:text-rose-500 transition-colors" />
+        <ChevronRight
+          size={18}
+          className="text-slate-300 group-hover:text-rose-500 transition-colors"
+        />
       </button>
 
       {/* QUICK STATS PANELS - Mobile app style responsive grid */}
       <div className="grid grid-cols-2 gap-4">
-        
         {/* Total Games Created */}
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 p-4 rounded-3xl shadow-sm flex flex-col justify-between">
           <div className="flex justify-between items-start">
@@ -115,7 +131,6 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             </p>
           </div>
         </div>
-
       </div>
 
       {/* RECENT LIVESTREAM GAMES SECTION */}
@@ -132,9 +147,12 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-950 flex items-center justify-center text-slate-400 mx-auto mb-3 border border-slate-100 dark:border-slate-900/60">
               <PlayCircle size={22} className="text-slate-400" />
             </div>
-            <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300">No active game lobbies</h4>
+            <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300">
+              No active game lobbies
+            </h4>
             <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-xs mx-auto">
-              Launch a live score tracker game using the button above and add player handles!
+              Launch a live score tracker game using the button above and add
+              player handles!
             </p>
           </div>
         ) : (
@@ -148,14 +166,24 @@ export const HomeTab: React.FC<HomeTabProps> = ({
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800 font-bold text-[10px] text-slate-400 uppercase shrink-0">
-                    <span className="text-rose-500 font-extrabold">{game.game_type.substring(0, 3)}</span>
+                    <span className="text-rose-500 font-extrabold">
+                      {game.game_type.substring(0, 3)}
+                    </span>
                   </div>
                   <div className="min-w-0">
                     <h4 className="text-sm font-bold text-slate-800 dark:text-white truncate">
                       {game.title}
                     </h4>
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">
-                      Type: <span className="font-semibold text-slate-600 dark:text-slate-400">{game.game_type}</span> • {new Date(game.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                      Type:{" "}
+                      <span className="font-semibold text-slate-600 dark:text-slate-400">
+                        {game.game_type}
+                      </span>{" "}
+                      •{" "}
+                      {new Date(game.created_at).toLocaleDateString([], {
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </p>
                   </div>
                 </div>
@@ -163,7 +191,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   <span className="text-[10px] font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800/60 px-2.5 py-1 rounded-full group-hover:bg-rose-50 dark:group-hover:bg-rose-950/20 group-hover:text-rose-600 group-hover:border-rose-200 transition-colors">
                     Manage
                   </span>
-                  <ChevronRight size={15} className="text-slate-300 dark:text-slate-700" />
+                  <ChevronRight
+                    size={15}
+                    className="text-slate-300 dark:text-slate-700"
+                  />
                 </div>
               </div>
             ))}
@@ -177,11 +208,12 @@ export const HomeTab: React.FC<HomeTabProps> = ({
         <div>
           <h4 className="font-bold">Pro streams integration tip</h4>
           <p className="opacity-90 mt-0.5 leading-relaxed">
-            Configure a browser source overlay in OBS using the link inside any game lobby. Players see their rankings update immediately with zero delay.
+            Configure a browser source overlay in OBS using the link inside any
+            game lobby. Players see their rankings update immediately with zero
+            delay.
           </p>
         </div>
       </div>
-
     </div>
   );
 };

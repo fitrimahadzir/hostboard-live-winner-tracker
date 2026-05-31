@@ -269,6 +269,33 @@ export const dbService = {
           setLocalStorage('sb_session', session);
         }
       }
+    },
+
+    async updateUserCredentials(userId: string, newEmail?: string, newPassword?: string) {
+      if (isSupabaseConfigured && supabase) {
+        let updates: { email?: string; password?: string } = {};
+        if (newEmail) updates.email = newEmail;
+        if (newPassword) updates.password = newPassword;
+        if (Object.keys(updates).length > 0) {
+          const { error } = await supabase.auth.updateUser(updates);
+          if (error) throw error;
+        }
+      } else {
+        // Sandbox update
+        const users = getLocalStorage<any[]>('sb_auth_users', []);
+        const idx = users.findIndex(u => u.id === userId);
+        if (idx !== -1) {
+          if (newEmail) users[idx].email = newEmail;
+          if (newPassword) users[idx].password = newPassword;
+          setLocalStorage('sb_auth_users', users);
+        }
+
+        const session = getLocalStorage<any>('sb_session', null);
+        if (session && session.user.id === userId) {
+          if (newEmail) session.user.email = newEmail;
+          setLocalStorage('sb_session', session);
+        }
+      }
     }
   },
 

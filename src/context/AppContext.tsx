@@ -26,6 +26,8 @@ interface AppContextType {
   signInWithGoogleToken: (token: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  updateUserProfile: (username: string, avatarUrl: string) => Promise<void>;
+  updateUserCredentials: (newEmail?: string, newPassword?: string) => Promise<void>;
   refreshGames: () => Promise<void>;
   createGame: (title: string, gameType: string) => Promise<Game>;
   deleteGame: (gameId: string) => Promise<void>;
@@ -47,19 +49,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [games, setGames] = useState<Game[]>([]);
   const [currentTournament, setCurrentTournament] = useState<Game | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   // Initialize theme from storage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('tt_theme') as 'light' | 'dark' | null;
-    const initialTheme = savedTheme || 'light';
-    setTheme(initialTheme);
-    if (initialTheme === 'dark') {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    document.body.classList.add('dark');
   }, []);
 
   // Fetch session on load
@@ -144,15 +139,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    localStorage.setItem('tt_theme', nextTheme);
-    if (nextTheme === 'dark') {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-    addToast(`Switched to ${nextTheme} mode`, 'info');
+    // Disabled: forced dark mode everywhere
   };
 
   const signUp = async (email: string, username: string, pass: string) => {
@@ -241,6 +228,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addToast('Logout failed', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateUserProfile = async (username: string, avatarUrl: string) => {
+    if (!user) return;
+    try {
+      await dbService.auth.updateProfile(user.id, username, avatarUrl);
+      setUser({ ...user, username, avatar_url: avatarUrl });
+      addToast('Profile updated', 'success');
+    } catch (err: any) {
+      addToast(err.message || 'Failed to update profile', 'error');
+      throw err;
+    }
+  };
+
+  const updateUserCredentials = async (newEmail?: string, newPassword?: string) => {
+    if (!user) return;
+    try {
+      await dbService.auth.updateUserCredentials(user.id, newEmail, newPassword);
+      if (newEmail) {
+        setUser({ ...user, email: newEmail });
+      }
+      addToast('Credentials updated successfully', 'success');
+    } catch (err: any) {
+      addToast(err.message || 'Failed to update credentials', 'error');
+      throw err;
     }
   };
 
@@ -431,6 +444,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         signInWithGoogleToken,
         signInWithGoogle,
         signOut,
+        updateUserProfile,
+        updateUserCredentials,
         refreshGames,
         createGame,
         deleteGame,
