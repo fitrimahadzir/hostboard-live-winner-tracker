@@ -1,11 +1,23 @@
-<div align="center">
+# 🎮 HostBoard - TikTok LIVE Tracker
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+**HostBoard** ialah sebuah sistem penjejakan langsung (*live tracking system*) berorientasikan peranti mudah alih (*mobile-first*) yang direka khas untuk *host streamer* (contohnya TikTok LIVE). Ia digunakan untuk menguruskan rekod kemenangan pemain, memantau pusingan, dan menyegerakkan carta pendahulu (*leaderboard*) secara langsung (Masa Nyata/Real-time) ke perisian siaran seperti OBS.
 
-  <h1>Built with AI Studio</h2>
+## ✨ Ciri-ciri Utama (Core Features)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+- **🔐 Log Masuk Pintar (Authentication):** Sokongan log masuk E-mel/Kata Laluan serta **Google OAuth** melalui Supabase Auth.
+- **📡 Suapan Aktiviti Masa Nyata (Real-time Activity Feed):** Merekod dan memaparkan sejarah log seperti penciptaan permainan baharu, kemas kini permarkahan dan kemenangan secara langsung dari *Supabase Realtime*.
+- **🏆 Pengurusan Pusingan & Permainan:** Terdapat ruangan khas untuk mengurus profil, bilik pemain (*game lobbies*), dan ubah suai skor secara interaktif.
+- **📱 UI Mobile-First:** Reka bentuk anatomi moden menggunakan *Tailwind CSS* dengan ruang navigasi bawah (*bottom bar*) untuk capaian antaramuka optimum.
+- **🛡️ Pangkalan Data Selamat:** Integrasi backend *Supabase (PostgreSQL)* lengkap bersama *Row Level Security (RLS)* dan fungsi profil pemicu automatik (*auto triggers*).
+- **🛠️ Mod Pembangunan Bersepadu (DEV Mode):** Termasuk struktur ujian yang membenarkan pemaju mengubah mod sistem tanpa mengakses Google OAuth dan pengkalan data sebenar apabila diuji secara offline/local.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## 🚀 Teknologi Yang Digunakan (Tech Stack)
 
-</div>
+- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Lucide React.
+- **Backend & Database:** Supabase (Auth, Postgres, Realtime channel).
+- **Architecture:** Client-side SPA sedia disiarkan ke platform awan.
+
+## 📦 Maklumat Pangkalan Data
+
+- Menggunakan modul tambahan `pgcrypto` untuk pengurusan ID UUID selamat.
+- Entiti utama: `profiles`, `games`, `players`, `activity_logs`.
