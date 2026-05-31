@@ -36,13 +36,22 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
     <div className="space-y-4 pb-28 md:pb-6 relative select-none">
       
       {/* HEADER ROW */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-5 rounded-[2rem] shadow-sm">
         <div>
-          <h2 className="text-lg font-bold text-slate-950 dark:text-white">
-            Livestream Lobbies
-          </h2>
+          <div className="flex items-center gap-2 mb-1.5">
+            <h2 className="text-lg font-bold text-slate-950 dark:text-white leading-none">
+              Stream Rooms
+            </h2>
+            <span className={`text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full border ${
+              useApp().isSupabaseConnected 
+                ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900" 
+                : "text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-950/20 border-slate-100 dark:border-slate-900"
+            }`}>
+              {useApp().isSupabaseConnected ? "Live" : "Local Only"}
+            </span>
+          </div>
           <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-            Search, filter, or manage your active games ({games.length})
+            Manage your active livestream game lobbies ({games.length})
           </p>
         </div>
       </div>

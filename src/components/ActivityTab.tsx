@@ -119,10 +119,23 @@ export const ActivityTab: React.FC = () => {
       {/* Primary Hero Header */}
       <div className="bg-gradient-to-br from-slate-900 to-rose-950 text-white rounded-[2rem] p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
-        <span className="text-[10px] uppercase font-bold tracking-widest text-rose-300 bg-rose-500/20 px-2.5 py-1 rounded-full border border-rose-500/30">
-          Live Feed Tracker
-        </span>
-        <h1 className="text-xl font-bold tracking-tight mt-3">
+        
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className="text-[10px] uppercase font-bold tracking-widest text-white/40 bg-white/5 px-2.5 py-1 rounded-full border border-white/10 uppercase">
+            Official Activity
+          </span>
+          {user && (
+            <span className={`text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border ${
+              useApp().isSupabaseConnected 
+                ? "text-cyan-300 bg-cyan-500/20 border-cyan-500/30" 
+                : "text-slate-300 bg-slate-500/20 border-slate-500/30"
+            }`}>
+              {useApp().isSupabaseConnected ? "Live Syncing" : "Offline Mode"}
+            </span>
+          )}
+        </div>
+
+        <h1 className="text-xl font-bold tracking-tight">
           Activity Stream
         </h1>
         <p className="text-xs text-rose-100/70 mt-1 max-w-sm">
@@ -211,7 +224,7 @@ export const ActivityTab: React.FC = () => {
           
           <div className="flex items-center justify-between px-1">
             <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
-              Feed Stream ({filteredLogs.length} events)
+              Recent Events ({filteredLogs.length})
             </span>
             {logs.length > 0 && (
               <button
@@ -296,8 +309,8 @@ export const ActivityTab: React.FC = () => {
           {/* Quick simulation bar at the bottom for quick triggers */}
           <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-3xl mt-4 flex flex-col sm:flex-row gap-2.5 items-center justify-between">
             <div className="text-center sm:text-left">
-              <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Fast Feed Simulator</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">Inject event records easily to test OBS sync panels</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Activity Simulator</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500">Simulate events to test your overlays</p>
             </div>
             <div className="flex flex-wrap gap-1.5 justify-center">
               <button 
