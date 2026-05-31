@@ -1,5 +1,6 @@
 import React from "react";
 import { useApp } from "../context/AppContext";
+import { DEV_MODE } from "../config/env";
 import md5 from "md5";
 import {
   Trophy,
@@ -30,8 +31,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   const sampleBestPerformance =
     games.length > 0 ? games[0].title : "No rounds started";
   const statusBadge = isSupabaseConnected
-    ? "Realtime Supabase Active"
-    : "Offline Local Storage Sandbox";
+    ? "Live Syncing"
+    : "Offline Mode";
 
   return (
     <div className="space-y-6 pb-24 md:pb-6">
@@ -42,9 +43,11 @@ export const HomeTab: React.FC<HomeTabProps> = ({
 
         <div className="flex items-center justify-between gap-4 relative z-10">
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-rose-300 bg-rose-500/20 px-2.5 py-1 rounded-full border border-rose-500/30">
-              {statusBadge}
-            </span>
+            {(isSupabaseConnected || DEV_MODE) && (
+              <span className="text-[10px] uppercase font-bold tracking-widest text-rose-300 bg-rose-500/20 px-2.5 py-1 rounded-full border border-rose-500/30">
+                {statusBadge}
+              </span>
+            )}
             <h1 className="text-xl font-bold tracking-tight mt-3 text-white">
               Welcome back, {user?.username || "Host"}!
             </h1>

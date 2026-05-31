@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { DEV_MODE } from '../config/env';
 import { Search, Filter, Trophy, Calendar, ChevronRight, Plus, FolderHeart, ArrowUpDown } from 'lucide-react';
 import { Game } from '../types';
 
@@ -42,13 +43,15 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
             <h2 className="text-lg font-bold text-slate-950 dark:text-white leading-none">
               Stream Rooms
             </h2>
-            <span className={`text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full border ${
-              useApp().isSupabaseConnected 
-                ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900" 
-                : "text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-950/20 border-slate-100 dark:border-slate-900"
-            }`}>
-              {useApp().isSupabaseConnected ? "Live" : "Local Only"}
-            </span>
+            {(useApp().isSupabaseConnected || DEV_MODE) && (
+              <span className={`text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full border ${
+                useApp().isSupabaseConnected 
+                  ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900" 
+                  : "text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-950/20 border-slate-100 dark:border-slate-900"
+              }`}>
+                {useApp().isSupabaseConnected ? "Live" : "Local Only"}
+              </span>
+            )}
           </div>
           <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
             Manage your active livestream game lobbies ({games.length})

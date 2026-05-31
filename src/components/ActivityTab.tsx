@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { dbService } from '../lib/supabase';
 import { ActivityLog } from '../types';
+import { DEV_MODE } from '../config/env';
 import { 
   Bell, 
   Award, 
@@ -124,7 +125,7 @@ export const ActivityTab: React.FC = () => {
           <span className="text-[10px] uppercase font-bold tracking-widest text-white/40 bg-white/5 px-2.5 py-1 rounded-full border border-white/10 uppercase">
             Official Activity
           </span>
-          {user && (
+          {user && (useApp().isSupabaseConnected || DEV_MODE) && (
             <span className={`text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border ${
               useApp().isSupabaseConnected 
                 ? "text-cyan-300 bg-cyan-500/20 border-cyan-500/30" 
@@ -204,20 +205,22 @@ export const ActivityTab: React.FC = () => {
           </p>
 
           {/* Quick simulation buttons when local sandbox triggers are handy */}
-          <div className="mt-8 flex flex-col md:flex-row gap-2 w-full justify-center max-w-sm">
-            <button
-              onClick={() => handleInsertSampleLog('wins')}
-              className="px-3.5 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-500 dark:text-rose-400 border border-rose-100 dark:border-rose-900/45 rounded-xl text-[10px] font-bold uppercase transition-all"
-            >
-              + Simulate Player Win
-            </button>
-            <button
-              onClick={() => handleInsertSampleLog('game_created')}
-              className="px-3.5 py-2 hover:bg-slate-55 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl text-[10px] font-bold uppercase transition-all border border-transparent dark:border-slate-700"
-            >
-              + Simulate Game Start
-            </button>
-          </div>
+          {DEV_MODE && (
+            <div className="mt-8 flex flex-col md:flex-row gap-2 w-full justify-center max-w-sm">
+              <button
+                onClick={() => handleInsertSampleLog('wins')}
+                className="px-3.5 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-500 dark:text-rose-400 border border-rose-100 dark:border-rose-900/45 rounded-xl text-[10px] font-bold uppercase transition-all"
+              >
+                + Simulate Player Win
+              </button>
+              <button
+                onClick={() => handleInsertSampleLog('game_created')}
+                className="px-3.5 py-2 hover:bg-slate-55 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl text-[10px] font-bold uppercase transition-all border border-transparent dark:border-slate-700"
+              >
+                + Simulate Game Start
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
@@ -307,26 +310,28 @@ export const ActivityTab: React.FC = () => {
           </div>
 
           {/* Quick simulation bar at the bottom for quick triggers */}
-          <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-3xl mt-4 flex flex-col sm:flex-row gap-2.5 items-center justify-between">
-            <div className="text-center sm:text-left">
-              <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Activity Simulator</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">Simulate events to test your overlays</p>
+          {DEV_MODE && (
+            <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-3xl mt-4 flex flex-col sm:flex-row gap-2.5 items-center justify-between">
+              <div className="text-center sm:text-left">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Activity Simulator</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500">Simulate events to test your overlays</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5 justify-center">
+                <button 
+                  onClick={() => handleInsertSampleLog('wins')} 
+                  className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-600 transition-colors border border-slate-200 dark:border-slate-700 rounded-xl text-[9px] font-bold uppercase"
+                >
+                  + Win Record
+                </button>
+                <button 
+                  onClick={() => handleInsertSampleLog('game_created')} 
+                  className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-600 transition-colors border border-slate-200 dark:border-slate-700 rounded-xl text-[9px] font-bold uppercase"
+                >
+                  + Game Create
+                </button>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-1.5 justify-center">
-              <button 
-                onClick={() => handleInsertSampleLog('wins')} 
-                className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-600 transition-colors border border-slate-200 dark:border-slate-700 rounded-xl text-[9px] font-bold uppercase"
-              >
-                + Win Record
-              </button>
-              <button 
-                onClick={() => handleInsertSampleLog('game_created')} 
-                className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-600 transition-colors border border-slate-200 dark:border-slate-700 rounded-xl text-[9px] font-bold uppercase"
-              >
-                + Game Create
-              </button>
-            </div>
-          </div>
+          )}
 
         </div>
       )}
