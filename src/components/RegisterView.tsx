@@ -85,7 +85,7 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
           {/* Username Field */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-              TikTok ID
+              Username
             </label>
             <div className="relative">
               <User

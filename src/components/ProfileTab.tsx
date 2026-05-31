@@ -191,7 +191,7 @@ export const ProfileTab: React.FC = () => {
               <div className="flex-1 space-y-3">
                 <div>
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                    TikTok ID / Username
+                    Username
                   </label>
                   <input
                     type="text"
