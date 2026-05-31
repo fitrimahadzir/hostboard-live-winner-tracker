@@ -21,8 +21,13 @@ const getS3Client = () => {
   const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
 
-  // Clean accountId: remove protocol and trailing slashes if user mistakenly added them
+  // Clean accountId: remove protocol and trailing slashes
   accountId = accountId.replace(/^https?:\/\//i, "").replace(/\/+$/, "").trim();
+  
+  // If user pasted the whole endpoint URL, extract just the account ID
+  if (accountId.includes('.r2.cloudflarestorage.com')) {
+    accountId = accountId.split('.r2.cloudflarestorage.com')[0];
+  }
 
   if (!accountId || !accessKeyId || !secretAccessKey || 
       accountId.includes("YOUR") || accessKeyId.includes("YOUR")) {
@@ -40,13 +45,17 @@ const getS3Client = () => {
 };
 
 app.post("/api/upload-avatar", upload.single("avatar"), async (req, res) => {
+  console.log("Upload request received");
   try {
     if (!req.file) {
+      console.log("No file in request");
       return res.status(400).json({ error: "No file uploaded" });
     }
 
     const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME;
     const publicUrl = process.env.CLOUDFLARE_R2_PUBLIC_URL;
+
+    console.log(`Bucket: ${bucketName}, PublicURL: ${publicUrl}`);
 
     if (!bucketName || !publicUrl) {
       return res.status(500).json({ error: "Missing Cloudflare R2 bucket configuration." });
@@ -64,6 +73,8 @@ app.post("/api/upload-avatar", upload.single("avatar"), async (req, res) => {
     const filename = `avatars/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExtension}`;
 
     const s3Client = getS3Client();
+    console.log("S3 Client initialized successfully");
+    
     const command = new PutObjectCommand({
       Bucket: bucketName,
       Key: filename,
@@ -71,17 +82,38 @@ app.post("/api/upload-avatar", upload.single("avatar"), async (req, res) => {
       ContentType: file.mimetype,
     });
 
+    console.log(`Sending to R2: ${filename} to bucket ${bucketName}`);
     await s3Client.send(command);
+    console.log("Upload to R2 successful");
 
     // Format public URL
-    const baseUrl = publicUrl.endsWith('/') ? publicUrl.slice(0, -1) : publicUrl;
+    let baseUrl = publicUrl.trim();
+    if (baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, -1);
+    }
+    
+    // Ensure baseUrl starts with https://
+    if (!baseUrl.startsWith('http')) {
+      baseUrl = `https://${baseUrl}`;
+    }
+
     const finalUrl = `${baseUrl}/${filename}`;
 
+    console.log(`Successfully uploaded. Public URL: ${finalUrl}`);
     res.json({ url: finalUrl });
   } catch (error: any) {
     console.error("Avatar Upload Error:", error);
     res.status(500).json({ error: error.message || "Failed to upload avatar" });
   }
+});
+
+// Global error handler for multer and other errors
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error("Global Error:", err);
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: `Upload error: ${err.message}` });
+  }
+  res.status(500).json({ error: err.message || "Internal server error" });
 });
 
 async function startServer() {
@@ -96,7 +128,7 @@ async function startServer() {
     if (fs.existsSync(distPath)) {
       app.use(express.static(distPath));
     }
-    app.get('*all', (req, res) => {
+    app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }

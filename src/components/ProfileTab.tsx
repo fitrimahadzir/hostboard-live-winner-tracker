@@ -95,12 +95,20 @@ export const ProfileTab: React.FC = () => {
                        body: formData,
                    });
 
-                   if (!res.ok) {
-                     const errData = await res.json();
-                     throw new Error(errData.error || "Failed to upload to CDN");
+                   const contentType = res.headers.get("content-type");
+                   let data;
+                   
+                   if (contentType && contentType.includes("application/json")) {
+                     data = await res.json();
+                   } else {
+                     const text = await res.text();
+                     console.error("Non-JSON response:", text);
+                     throw new Error(`Upload failed with status ${res.status}.`);
                    }
 
-                   const data = await res.json();
+                   if (!res.ok) {
+                     throw new Error(data?.error || "Failed to upload image");
+                   }
                    
                    // Important: update local profile state via updateUserProfile to persist it right away
                    await updateUserProfile(editUsername || user?.username || '', data.url);

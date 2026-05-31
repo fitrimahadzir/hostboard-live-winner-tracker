@@ -184,7 +184,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
               className="w-full mt-2 py-3.5 rounded-2xl font-semibold text-sm text-white tiktok-gradient-primary shadow-lg shadow-rose-500/20 hover:shadow-rose-500/30 hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500/20"
             >
               <LogIn size={16} />
-              <span>{loading ? 'Entering Stream Room...' : 'Sign In as Live Host'}</span>
+              <span>{loading ? 'Entering Stream Room...' : 'Sign In as Host'}</span>
             </button>
 
             {/* Optional social login button */}
@@ -232,7 +232,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
               onClick={onNavigateToRegister}
               className="text-rose-500 hover:text-rose-600 font-bold hover:underline focus:outline-none flex items-center justify-center gap-0.5 mx-auto mt-1"
             >
-              <span>Register Here</span>
+              <span>Register as Host</span>
               <ChevronRight size={14} />
             </button>
           </p>

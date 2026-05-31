@@ -59,31 +59,6 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
           </p>
         </div>
 
-        {/* Sandbox Indicator */}
-        <div
-          className={`mb-6 p-3.5 rounded-2xl text-xs font-semibold flex items-center justify-between border ${
-            isSupabaseConnected
-              ? "bg-cyan-50/50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900 text-cyan-600 dark:text-cyan-400"
-              : "bg-yellow-50/50 dark:bg-amber-950/20 border-yellow-100 dark:border-amber-900 text-amber-600 dark:text-amber-400"
-          }`}
-        >
-          <div>
-            <p className="font-bold">
-              {isSupabaseConnected
-                ? "⚡ Production Database"
-                : "☁️ Sandbox Active"}
-            </p>
-            <p className="opacity-90 mt-0.5 font-normal">
-              {isSupabaseConnected
-                ? "Secure sign up directly in Supabase table"
-                : "Local storage is active on the browser"}
-            </p>
-          </div>
-          <span
-            className={`w-2 h-2 rounded-full ${isSupabaseConnected ? "bg-cyan-500" : "bg-amber-500"}`}
-          />
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email field */}
           <div className="space-y-1">
@@ -161,7 +136,7 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
           >
             <UserPlus size={16} />
             <span>
-              {loading ? "Creating Host Room..." : "Register as Official Host"}
+              {loading ? "Creating Host Room..." : "Register as Host"}
             </span>
           </button>
 
