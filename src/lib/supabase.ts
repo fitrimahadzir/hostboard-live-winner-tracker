@@ -75,16 +75,24 @@ export const dbService = {
         if (error) throw error;
         
         // Profiles may be inserted via a trigger, but to guarantee reliability,
-        // we write the profile insert manually
+        // we write the profile insert manually. We use upsert to avoid issues with triggers.
         if (data.user) {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert({
-              id: data.user.id,
-              username,
-              avatar_url: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(username)}`,
-            });
-          if (profileError) console.warn('Profile creation warning:', profileError.message);
+          try {
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .upsert({
+                id: data.user.id,
+                username,
+                avatar_url: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(username)}`,
+              });
+            if (profileError) {
+              console.warn('Profile sync notice:', profileError.message);
+              // Handle RLS error specifically - if it fails here, the user is still authenticated
+              // and the trigger might have already created the profile
+            }
+          } catch (e: any) {
+            console.warn('Profile sync exception:', e.message);
+          }
         }
 
         return data;
