@@ -16,8 +16,7 @@ import {
   Edit2,
   Check,
   X,
-  Lock,
-  Camera
+  Lock
 } from "lucide-react";
 
 export const ProfileTab: React.FC = () => {
@@ -38,10 +37,6 @@ export const ProfileTab: React.FC = () => {
   const [editEmail, setEditEmail] = useState("");
   const [editPassword, setEditPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Custom Avatar Upload
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user && !isEditing) {
@@ -51,102 +46,6 @@ export const ProfileTab: React.FC = () => {
     }
   }, [user, isEditing]);
 
-  const handleAvatarClick = () => {
-    if (isEditing && fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const processAndUploadImage = (file: File) => {
-    setIsUploadingAvatar(true);
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        // For a square crop, we find the shortest side
-        const size = Math.min(img.width, img.height);
-        const sourceX = (img.width - size) / 2;
-        const sourceY = (img.height - size) / 2;
-
-        const MAX_SIZE = 400; // Let's use 400x400 for better quality than 250
-        
-        const canvas = document.createElement("canvas");
-        canvas.width = MAX_SIZE;
-        canvas.height = MAX_SIZE;
-
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-             // Use imageSmoothingEnabled for better quality
-             ctx.imageSmoothingEnabled = true;
-             ctx.imageSmoothingQuality = 'high';
-             
-             // Draw the center square portion of the image into the square canvas
-             ctx.drawImage(img, sourceX, sourceY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
-             
-             canvas.toBlob(async (blob) => {
-               if (blob) {
-                 const formData = new FormData();
-                 formData.append("avatar", blob, file.name);
-
-                 try {
-                   const res = await fetch("/api/upload-avatar", {
-                       method: "POST",
-                       body: formData,
-                   });
-
-                   const contentType = res.headers.get("content-type");
-                   let data;
-                   
-                   if (contentType && contentType.includes("application/json")) {
-                     data = await res.json();
-                   } else {
-                     const text = await res.text();
-                     console.error("Non-JSON response:", text);
-                     throw new Error(`Upload failed with status ${res.status}.`);
-                   }
-
-                   if (!res.ok) {
-                     throw new Error(data?.error || "Failed to upload image");
-                   }
-                   
-                   // Important: update local profile state via updateUserProfile to persist it right away
-                   await updateUserProfile(editUsername || user?.username || '', data.url);
-                   addToast("Profile picture updated", "success");
-                 } catch (err: any) {
-                   console.error(err);
-                   addToast(err.message || "Could not upload image", "error");
-                 } finally {
-                   setIsUploadingAvatar(false);
-                 }
-               }
-             }, "image/jpeg", 0.85); // 85% quality JPEG
-        } else {
-             setIsUploadingAvatar(false);
-        }
-      };
-      img.onerror = () => {
-        addToast("Invalid image file", "error");
-        setIsUploadingAvatar(false);
-      };
-      if (e.target?.result) {
-         img.src = e.target.result as string;
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      if (!file.type.startsWith("image/")) {
-        addToast("Please select an image file", "error");
-        return;
-      }
-      processAndUploadImage(file);
-    }
-  };
-
   const handleSaveProfile = async () => {
     if (!editUsername.trim() || !editEmail.trim()) {
       addToast("Username and Email cannot be empty", "error");
@@ -154,21 +53,15 @@ export const ProfileTab: React.FC = () => {
     }
     setIsLoading(true);
     try {
-      // Logic for fallback DP only if we aren't using a custom/uploaded avatar.
+      // Logic for fallback DP
       const currentAvatar = user?.avatar_url || '';
       let nextAvatarUrl = currentAvatar;
       
       const emailHash = md5(editEmail.trim().toLowerCase());
       const gravatarUrl = `https://www.gravatar.com/avatar/${emailHash}?d=mp`;
 
-      const isCustomAvatar = currentAvatar && 
-                             !currentAvatar.includes('gravatar.com') && 
-                             !currentAvatar.includes('dicebear.com') && 
-                             !currentAvatar.includes('googleusercontent.com') &&
-                             currentAvatar !== '';
-
-      // If they changed their email, and don't have a custom uploaded avatar, fall back to Gravatar
-      if (editEmail !== user?.email && !isCustomAvatar) {
+      // If they changed their email and the current avatar is a gravatar-like default, update it
+      if (editEmail !== user?.email && (!currentAvatar || currentAvatar.includes('gravatar.com') || currentAvatar.includes('dicebear.com'))) {
          nextAvatarUrl = gravatarUrl;
       }
 
@@ -277,29 +170,10 @@ export const ProfileTab: React.FC = () => {
               <img
                 id="profile-avatar-large"
                 src={currentDp}
-                onClick={handleAvatarClick}
                 alt="Profile Avatar"
-                className={`w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 dark:border-slate-800 shrink-0 object-cover ${isEditing ? "cursor-pointer group-hover:opacity-50" : ""} transition-opacity`}
+                className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 dark:border-slate-800 shrink-0 object-cover transition-opacity"
                 referrerPolicy="no-referrer"
               />
-              {isEditing && (
-                 <div onClick={handleAvatarClick} className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity">
-                    {isUploadingAvatar ? (
-                       <div className="w-5 h-5 rounded-full border-2 border-rose-500 border-t-transparent animate-spin"></div>
-                    ) : (
-                       <Camera className="text-white drop-shadow-md opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
-                    )}
-                 </div>
-              )}
-              {isEditing && (
-                <input 
-                  type="file" 
-                  accept="image/jpeg, image/png, image/webp, image/gif" 
-                  ref={fileInputRef} 
-                  onChange={handleFileChange} 
-                  className="hidden" 
-                />
-              )}
             </div>
             {!isEditing ? (
               <div className="min-w-0 flex-1">
