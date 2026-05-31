@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Mail, Lock, User, UserPlus, ChevronLeft } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 
 interface RegisterViewProps {
   onNavigateToLogin: () => void;
 }
 
 export const RegisterView: React.FC<RegisterViewProps> = ({ onNavigateToLogin }) => {
-  const { signUp, isSupabaseConnected } = useApp();
+  const { signUp, isSupabaseConnected, signInWithGoogleToken } = useApp();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -81,7 +82,7 @@ export const RegisterView: React.FC<RegisterViewProps> = ({ onNavigateToLogin })
               <input
                 id="register-email"
                 type="email"
-                placeholder="streamer@host.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-sm"
@@ -139,6 +140,27 @@ export const RegisterView: React.FC<RegisterViewProps> = ({ onNavigateToLogin })
             <UserPlus size={16} />
             <span>{loading ? 'Creating Host Room...' : 'Register as Official Host'}</span>
           </button>
+
+          {/* Optional social login button */}
+          <div className="flex justify-center w-full overflow-hidden rounded-2xl">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+                  if (credentialResponse.credential) {
+                    await signInWithGoogleToken(credentialResponse.credential);
+                  }
+                } catch (err) {
+                  console.error('Google Sign up Error:', err);
+                }
+              }}
+              onError={() => {
+                console.error('Google Sign up Failed');
+              }}
+              theme="outline"
+              size="large"
+              width="100%"
+            />
+          </div>
 
         </form>
 

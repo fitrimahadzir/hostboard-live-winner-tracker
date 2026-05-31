@@ -9,7 +9,7 @@ interface LoginViewProps {
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) => {
-  const { signIn, signInWithGoogle, isSupabaseConnected, enterDevMode } = useApp();
+  const { signIn, signInWithGoogle, signInWithGoogleToken, isSupabaseConnected, enterDevMode } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -110,22 +110,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
               </div>
             ) : null}
           </div>
-        ) : (
-          /* Sandbox Indicator */
-          <div className={`mb-6 p-3.5 rounded-2xl text-xs font-semibold flex items-center justify-between border ${
-            isSupabaseConnected 
-              ? 'bg-cyan-50/50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900 text-cyan-600 dark:text-cyan-400' 
-              : 'bg-yellow-50/50 dark:bg-amber-950/20 border-yellow-100 dark:border-amber-900 text-amber-600 dark:text-amber-400'
-          }`}>
-            <div>
-              <p className="font-bold">{isSupabaseConnected ? '⚡ Connected to Supabase' : '☁️ Local Sandbox Active'}</p>
-              <p className="opacity-80 mt-0.5 font-normal">
-                {isSupabaseConnected ? 'Production credentials loaded' : 'Data stored on your local browser'}
-              </p>
-            </div>
-            <span className={`w-2 h-2 rounded-full ${isSupabaseConnected ? 'bg-cyan-500 animate-pulse' : 'bg-amber-500 animate-pulse'}`} />
-          </div>
-        )}
+        ) : null}
 
         {(!DEV_MODE || showRealForm) && (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -140,7 +125,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigateToRegister }) =>
                 <input
                   id="login-email"
                   type="email"
-                  placeholder="host@livesession.com"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-sm"
