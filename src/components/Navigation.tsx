@@ -24,10 +24,10 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('home')}
             className="relative flex flex-col items-center justify-center h-full transition-colors focus:outline-none"
           >
-            <div className="relative p-1 transition-transform duration-300 text-slate-400 dark:text-slate-500 hover:text-slate-600">
+            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'home' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
               <Home size={22} strokeWidth={2} />
             </div>
-            <span className="text-[10px] mt-0.5 font-medium transition-all text-slate-400 dark:text-slate-500">
+            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'home' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500'}`}>
               Home
             </span>
           </button>
@@ -38,13 +38,10 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('games')}
             className="relative flex flex-col items-center justify-center h-full transition-colors focus:outline-none"
           >
-            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'games' ? 'text-rose-500 scale-110' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
-              <Trophy size={22} strokeWidth={activeTab === 'games' ? 2.5 : 2} />
-              {activeTab === 'games' && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-              )}
+            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'games' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
+              <Trophy size={22} strokeWidth={2} />
             </div>
-            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'games' ? 'text-rose-500 font-semibold' : 'text-slate-400 dark:text-slate-500'}`}>
+            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'games' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500'}`}>
               Games
             </span>
           </button>
@@ -69,13 +66,10 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('activity')}
             className="relative flex flex-col items-center justify-center h-full transition-colors focus:outline-none"
           >
-            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'activity' ? 'text-rose-500 scale-110' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
-              <Bell size={22} strokeWidth={activeTab === 'activity' ? 2.5 : 2} />
-              {activeTab === 'activity' && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-              )}
+            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'activity' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
+              <Bell size={22} strokeWidth={2} />
             </div>
-            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'activity' ? 'text-rose-500 font-semibold' : 'text-slate-400 dark:text-slate-500'}`}>
+            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'activity' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500'}`}>
               Activity
             </span>
           </button>
@@ -86,13 +80,10 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('profile')}
             className="relative flex flex-col items-center justify-center h-full transition-colors focus:outline-none"
           >
-            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'profile' ? 'text-rose-500 scale-110' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
-              <User size={22} strokeWidth={activeTab === 'profile' ? 2.5 : 2} />
-              {activeTab === 'profile' && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-              )}
+            <div className={`relative p-1 transition-transform duration-300 ${activeTab === 'profile' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'}`}>
+              <User size={22} strokeWidth={2} />
             </div>
-            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'profile' ? 'text-rose-500 font-semibold' : 'text-slate-400 dark:text-slate-500'}`}>
+            <span className={`text-[10px] mt-0.5 font-medium transition-all ${activeTab === 'profile' ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500'}`}>
               Profile
             </span>
           </button>
@@ -120,7 +111,11 @@ export const Navigation: React.FC<NavigationProps> = ({
           <button
             id="sidebar-home-btn"
             onClick={() => setActiveTab('home')}
-            className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:text-slate-900"
+            className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all ${
+              activeTab === 'home'
+                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 shadow-inner'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:text-slate-900'
+            }`}
           >
             <Home size={18} />
             <span>Dashboard</span>
@@ -131,7 +126,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('games')}
             className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all ${
               activeTab === 'games'
-                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-semibold shadow-inner'
+                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 shadow-inner'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:text-slate-900'
             }`}
           >
@@ -144,7 +139,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('activity')}
             className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all ${
               activeTab === 'activity'
-                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-semibold shadow-inner'
+                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 shadow-inner'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:text-slate-900'
             }`}
           >
@@ -157,7 +152,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setActiveTab('profile')}
             className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all ${
               activeTab === 'profile'
-                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-semibold shadow-inner'
+                ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 shadow-inner'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:text-slate-900'
             }`}
           >
