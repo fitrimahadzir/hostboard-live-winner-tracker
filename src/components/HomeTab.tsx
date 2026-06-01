@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   ChevronRight,
   PlayCircle,
+  Trash2,
 } from "lucide-react";
 import { Game } from "../types";
 
@@ -22,7 +23,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   onSelectGame,
   onRequestCreateGame,
 }) => {
-  const { user, games, isSupabaseConnected } = useApp();
+  const { user, games, isSupabaseConnected, deleteGame } = useApp();
 
   // Calculate live stats
   const totalGames = games.length;
@@ -143,7 +144,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            Recent LIVE Games ({games.slice(0, 5).length})
+            Recent LIVE Games ({games.slice(0, 3).length})
           </h3>
         </div>
 
@@ -163,7 +164,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
           </div>
         ) : (
           <div className="space-y-2.5">
-            {games.slice(0, 5).map((game) => (
+            {games.slice(0, 3).map((game) => (
               <div
                 id={`recent-game-card-${game.id}`}
                 key={game.id}
@@ -195,12 +196,22 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span className="text-[10px] font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800/60 px-2.5 py-1 rounded-full group-hover:bg-rose-50 dark:group-hover:bg-rose-950/20 group-hover:text-rose-600 group-hover:border-rose-200 transition-colors">
-                    Manage
+                    Go to
                   </span>
                   <ChevronRight
                     size={15}
                     className="text-slate-300 dark:text-slate-700"
                   />
+                  <button
+                    id={`delete-recent-game-${game.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteGame(game.id);
+                    }}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/10 transition-colors focus:outline-none"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               </div>
             ))}

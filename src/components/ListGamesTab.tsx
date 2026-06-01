@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { DEV_MODE } from '../config/env';
-import { Search, ChevronRight, Plus, FolderHeart, ArrowUpDown } from 'lucide-react';
-import { Game } from '../types';
+import { Search, ChevronRight, Plus, FolderHeart, ArrowUpDown, Trash2 } from 'lucide-react';
 
 interface ListGamesTabProps {
   onSelectGame: (gameId: string) => void;
@@ -15,7 +14,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
   onSelectGame,
   onRequestCreateGame,
 }) => {
-  const { games } = useApp();
+  const { games, deleteGame } = useApp();
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('All');
   const [sortByNewest, setSortByNewest] = useState(true);
@@ -119,34 +118,56 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {filteredGames.map((game) => (
             <div
               id={`game-lobby-card-${game.id}`}
               key={game.id}
               onClick={() => onSelectGame(game.id)}
-              className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl px-4 py-3 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer flex items-center gap-3"
+              className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer group text-left"
             >
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                  {game.title}
-                </p>
-                <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-                  {game.game_type}
-                </p>
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800 font-bold text-[10px] text-slate-400 uppercase shrink-0">
+                  <span className="text-rose-500 font-extrabold">
+                    {game.game_type.substring(0, 3)}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-white truncate">
+                    {game.title}
+                  </h4>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">
+                    Type:{" "}
+                    <span className="font-semibold text-slate-600 dark:text-slate-400">
+                      {game.game_type}
+                    </span>{" "}
+                    •{" "}
+                    {new Date(game.created_at).toLocaleDateString([], {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
               </div>
-
-              <button
-                id={`open-lobby-btn-${game.id}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectGame(game.id);
-                }}
-                className="flex items-center gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-rose-500 transition-colors focus:outline-none shrink-0"
-              >
-                <span>Go to</span>
-                <ChevronRight size={13} />
-              </button>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-[10px] font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800/60 px-2.5 py-1 rounded-full group-hover:bg-rose-50 dark:group-hover:bg-rose-950/20 group-hover:text-rose-600 group-hover:border-rose-200 transition-colors">
+                  Go to
+                </span>
+                <ChevronRight
+                  size={15}
+                  className="text-slate-300 dark:text-slate-700"
+                />
+                <button
+                  id={`delete-lobby-btn-${game.id}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteGame(game.id);
+                  }}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/10 transition-colors focus:outline-none"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             </div>
           ))}
         </div>
