@@ -209,7 +209,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
       </div>
 
       {/* STREAMER TIPS FOOTER SECTION */}
-      <div className="p-4 bg-cyan-50/40 dark:bg-cyan-950/5 border border-cyan-100/50 dark:border-cyan-900/20 rounded-2xl flex gap-3 text-xs text-cyan-700 dark:text-cyan-400">
+      <div className="p-4 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl flex gap-3 text-xs text-slate-600 dark:text-slate-400">
         <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" />
         <div>
           <h4 className="font-bold">Pro streams integration tip</h4>
