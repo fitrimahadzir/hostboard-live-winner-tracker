@@ -2,6 +2,7 @@ export interface Profile {
   id: string;
   username: string;
   avatar_url: string;
+  full_name?: string;
   created_at?: string;
 }
 

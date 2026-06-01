@@ -86,7 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setGames(fetchedGames);
           }
           
-          import('../lib/supabase').then(({ supabase, isSupabaseConfigured }) => {
+          import('../lib/supabase').then(({ supabase, isSupabaseConfigured, getOrCreateProfile }) => {
             if (isSupabaseConfigured && supabase) {
               const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
@@ -94,6 +94,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   if (window.opener && window.location.search.includes('popup=true')) {
                     window.close();
                     return;
+                  }
+
+                  if (session?.user) {
+                    try {
+                      await getOrCreateProfile({
+                        id: session.user.id,
+                        email: session.user.email || undefined,
+                        user_metadata: session.user.user_metadata,
+                      });
+                    } catch (e: any) {
+                      console.warn('Profile auto-creation on auth event:', e.message);
+                    }
                   }
 
                   const u = await dbService.auth.getCurrentUser();

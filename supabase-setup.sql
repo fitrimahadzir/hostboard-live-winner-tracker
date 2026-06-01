@@ -6,6 +6,7 @@ create table if not exists public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
   username text unique not null,
   avatar_url text,
+  full_name text,
   created_at timestamptz default now()
 );
 
@@ -102,14 +103,47 @@ create policy "Users can insert their own logs"
 -- 9. Trigger for automatic profile creation on signup
 create or replace function public.handle_new_user() 
 returns trigger as $$
+declare
+  base_username text;
+  final_username text;
+  counter int := 0;
 begin
-  insert into public.profiles (id, username, avatar_url)
-  values (
-    new.id, 
-    coalesce(new.raw_user_meta_data->>'username', 'User_' || substr(new.id::text, 1, 5)), 
-    coalesce(new.raw_user_meta_data->>'avatar_url', '')
-  )
-  on conflict (id) do nothing;
+  -- Extract username from email (prefix before @)
+  base_username := lower(split_part(new.email, '@', 1));
+  -- Remove invalid characters (only a-z, 0-9, _ allowed)
+  base_username := regexp_replace(base_username, '[^a-z0-9_]', '', 'g');
+  -- Fallback if empty
+  if base_username = '' then
+    base_username := 'user';
+  end if;
+
+  final_username := base_username;
+
+  -- Loop to ensure unique username
+  loop
+    begin
+      insert into public.profiles (id, username, avatar_url, full_name)
+      values (
+        new.id,
+        final_username,
+        coalesce(
+          new.raw_user_meta_data->>'avatar_url',
+          new.raw_user_meta_data->>'picture',
+          ''
+        ),
+        coalesce(
+          new.raw_user_meta_data->>'full_name',
+          new.raw_user_meta_data->>'name',
+          ''
+        )
+      );
+      exit; -- success, exit loop
+    exception when unique_violation then
+      counter := counter + 1;
+      final_username := base_username || counter::text;
+    end;
+  end loop;
+
   return new;
 end;
 $$ language plpgsql security definer;
@@ -119,3 +153,21 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- 10. Function to safely generate unique username (client-friendly helper)
+create or replace function public.generate_unique_username(base text)
+returns text as $$
+declare
+  candidate text;
+  counter int := 0;
+begin
+  candidate := base;
+  loop
+    if not exists (select 1 from public.profiles where username = candidate) then
+      return candidate;
+    end if;
+    counter := counter + 1;
+    candidate := base || counter::text;
+  end loop;
+end;
+$$ language plpgsql stable;

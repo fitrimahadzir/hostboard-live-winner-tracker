@@ -54,6 +54,70 @@ const setLocalStorage = <T>(key: string, value: T): void => {
 // Helper to generate IDs
 const generateId = () => Math.random().toString(36).substring(2, 11);
 
+export function generateUniqueUsername(email: string): string {
+  let username = email.split('@')[0].toLowerCase();
+  username = username.replace(/[^a-z0-9_]/g, '');
+  if (!username) username = 'user';
+  return username;
+}
+
+export async function getOrCreateProfile(user: { id: string; email?: string; user_metadata?: Record<string, any> }): Promise<Profile | null> {
+  if (!isSupabaseConfigured || !supabase) {
+    return null;
+  }
+
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (existingProfile) {
+    const hasProperUsername = existingProfile.username && !existingProfile.username.startsWith('User_');
+    if (hasProperUsername) {
+      return existingProfile as Profile;
+    }
+  }
+
+  const email = user.email || '';
+  let baseUsername = generateUniqueUsername(email);
+  let username = baseUsername;
+  let counter = 1;
+
+  while (true) {
+    const { data: existing } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', username)
+      .maybeSingle();
+    if (!existing) break;
+    username = `${baseUsername}${counter}`;
+    counter++;
+  }
+
+  const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
+  const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
+
+  if (existingProfile) {
+    const { data: updated, error } = await supabase
+      .from('profiles')
+      .update({ username, avatar_url: avatarUrl, full_name: fullName })
+      .eq('id', user.id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updated as Profile;
+  }
+
+  const { data: newProfile, error } = await supabase
+    .from('profiles')
+    .insert({ id: user.id, username, avatar_url: avatarUrl, full_name: fullName })
+    .select()
+    .single();
+  if (error) throw error;
+  return newProfile as Profile;
+}
+
 export const dbService = {
   // Auth Operations
   auth: {
@@ -133,6 +197,20 @@ export const dbService = {
           token: idToken,
         });
         if (error) throw error;
+
+        if (data.user) {
+          try {
+            const profile = await getOrCreateProfile({
+              id: data.user.id,
+              email: data.user.email || undefined,
+              user_metadata: data.user.user_metadata,
+            });
+            return { ...data, profile };
+          } catch (e: any) {
+            console.warn('Profile auto-creation warning:', e.message);
+          }
+        }
+
         return data;
       } else {
         throw new Error('Google Sign In is not available in sandbox mode.');
@@ -189,7 +267,8 @@ export const dbService = {
             id: data.user.id,
             email: data.user.email || '',
             username: profile?.username || data.user.user_metadata?.username || 'Live Host',
-            avatar_url: profile?.avatar_url || data.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${data.user.id}`
+            avatar_url: profile?.avatar_url || data.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${data.user.id}`,
+            full_name: profile?.full_name || data.user.user_metadata?.full_name || '',
           }
         };
       } else {
@@ -238,7 +317,8 @@ export const dbService = {
           id: session.user.id,
           email: session.user.email || '',
           username: profile?.username || session.user.user_metadata?.username || 'Live Host',
-          avatar_url: profile?.avatar_url || session.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${session.user.id}`
+          avatar_url: profile?.avatar_url || session.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${session.user.id}`,
+          full_name: profile?.full_name || session.user.user_metadata?.full_name || '',
         };
       } else {
         const session = getLocalStorage<any>('sb_session', null);
@@ -247,14 +327,15 @@ export const dbService = {
       }
     },
 
-    async updateProfile(userId: string, username: string, avatarUrl: string) {
+    async updateProfile(userId: string, username: string, avatarUrl: string, fullName?: string) {
       if (isSupabaseConfigured && supabase) {
         const { error } = await supabase
           .from('profiles')
           .upsert({
             id: userId,
             username,
-            avatar_url: avatarUrl
+            avatar_url: avatarUrl,
+            full_name: fullName || null,
           });
         if (error) throw error;
       } else {
@@ -263,8 +344,9 @@ export const dbService = {
         if (idx !== -1) {
           profiles[idx].username = username;
           profiles[idx].avatar_url = avatarUrl;
+          if (fullName !== undefined) profiles[idx].full_name = fullName;
         } else {
-          profiles.push({ id: userId, username, avatar_url: avatarUrl });
+          profiles.push({ id: userId, username, avatar_url: avatarUrl, full_name: fullName });
         }
         setLocalStorage('sb_profiles', profiles);
 
@@ -273,6 +355,7 @@ export const dbService = {
         if (session && session.user.id === userId) {
           session.user.username = username;
           session.user.avatar_url = avatarUrl;
+          if (fullName !== undefined) session.user.full_name = fullName;
           setLocalStorage('sb_session', session);
         }
       }
