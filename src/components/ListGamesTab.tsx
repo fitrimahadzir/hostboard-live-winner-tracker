@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { DEV_MODE } from '../config/env';
-import { Search, Filter, Trophy, Calendar, ChevronRight, Plus, FolderHeart, ArrowUpDown } from 'lucide-react';
+import { Search, ChevronRight, Plus, FolderHeart, ArrowUpDown } from 'lucide-react';
 import { Game } from '../types';
 
 interface ListGamesTabProps {
@@ -119,52 +119,29 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div className="space-y-2">
           {filteredGames.map((game) => (
             <div
               id={`game-lobby-card-${game.id}`}
               key={game.id}
               onClick={() => onSelectGame(game.id)}
-              className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-4 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between group h-36"
+              className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl px-4 py-3 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-between gap-3"
             >
-              <div>
-                <div className="flex justify-between items-start gap-2">
-                  <span className="text-[9px] uppercase font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/20 border border-rose-100/50 dark:border-rose-900/30 px-2.5 py-0.5 rounded-full truncate">
-                    {game.game_type}
-                  </span>
-                  <div className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1 font-medium font-mono">
-                    <Calendar size={11} />
-                    <span>
-                      {new Date(game.created_at).toLocaleDateString([], {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </span>
-                  </div>
-                </div>
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">
+                {game.game_type}
+              </span>
 
-                <h3 className="text-sm font-bold text-slate-800 dark:text-white mt-2.5 line-clamp-1 truncate group-hover:text-rose-500 transition-colors">
-                  {game.title}
-                </h3>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-950 pt-2.5">
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
-                  ID: <span className="font-mono font-bold text-slate-600 dark:text-slate-400">{game.id}</span>
-                </span>
-
-                <button
-                  id={`open-lobby-btn-${game.id}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectGame(game.id);
-                  }}
-                  className="flex items-center gap-1 text-[11px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/20 px-3 py-1 rounded-full border border-rose-100/30 group-hover:bg-rose-500 group-hover:text-white group-hover:border-rose-500 transition-all focus:outline-none"
-                >
-                  <span>Open</span>
-                  <ChevronRight size={12} />
-                </button>
-              </div>
+              <button
+                id={`open-lobby-btn-${game.id}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectGame(game.id);
+                }}
+                className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-rose-500 transition-colors focus:outline-none shrink-0"
+              >
+                <span>Go to</span>
+                <ChevronRight size={13} />
+              </button>
             </div>
           ))}
         </div>
