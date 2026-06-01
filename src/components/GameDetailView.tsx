@@ -380,11 +380,11 @@ export const GameDetailView: React.FC<GameDetailViewProps> = ({
       )}
 
       {/* STICKY MAIN ACTION BUTTON IN PORTRAIT */}
-      <div className="fixed bottom-24 left-0 right-0 px-4 z-30 pointer-events-none">
+      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 z-30 pointer-events-none">
         <button
           id="detail-add-winner-trigger"
           onClick={() => setIsAddWinnerOpen(true)}
-          className="pointer-events-auto w-full mx-auto py-4 rounded-2xl text-sm font-bold text-white tiktok-gradient-primary shadow-xl shadow-rose-500/25 active:scale-95 transition-transform flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/20"
+          className="pointer-events-auto w-full py-4 rounded-2xl text-sm font-bold text-white tiktok-gradient-primary shadow-xl shadow-rose-500/25 active:scale-95 transition-transform flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/20"
         >
           <Plus size={18} strokeWidth={2.5} />
           <span>Add Game Winner</span>

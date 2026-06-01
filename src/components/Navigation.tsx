@@ -13,7 +13,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onRequestCreateGame,
 }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-lg border-t border-slate-200/50 dark:border-slate-800/50 rounded-t-3xl shadow-[0_-8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_24px_rgba(0,0,0,0.2)] safe-padding-bottom">
+    <div className="fixed bottom-0 left-0 right-0 mx-auto w-full max-w-[430px] z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-lg border-t border-slate-200/50 dark:border-slate-800/50 rounded-t-3xl shadow-[0_-8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_24px_rgba(0,0,0,0.2)] safe-padding-bottom">
       <div className="grid grid-cols-5 items-center justify-around h-16 max-w-lg mx-auto px-2 relative">
         
         {/* HOME TAB */}

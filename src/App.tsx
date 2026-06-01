@@ -24,9 +24,11 @@ const MainAppContent: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-[#070b12] gap-3">
-        <div className="animate-spin text-rose-500 w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full" />
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Starting Host Engine...</p>
+      <div className="min-h-screen bg-black flex justify-center">
+        <div className="w-full max-w-[430px] min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-[#070b12] gap-3">
+          <div className="animate-spin text-rose-500 w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full" />
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Starting Host Engine...</p>
+        </div>
       </div>
     );
   }
@@ -50,12 +52,13 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans pb-16">
+    <div className="min-h-screen bg-black flex justify-center">
+      <div className="w-full max-w-[430px] min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans pb-16 relative">
       
       {/* Toast Notification Container */}
       <ToastContainer />
 
-      {/* FIXED SIDE NAVIGATION FOR DESKTOP & BOTTOM STICKY FOR MOBILE */}
+      {/* BOTTOM STICKY NAV */}
       <Navigation
         activeTab={activeTab}
         setActiveTab={(tab) => {
@@ -66,7 +69,7 @@ const MainAppContent: React.FC = () => {
       />
 
       {/* CORE DISPLAY STAGE */}
-      <main className="flex-1 max-w-lg mx-auto w-full px-4 py-6">
+      <main className="flex-1 w-full px-4 py-6">
         <Routes>
           
           {/* Main dashboard tab matching dispatcher */}
@@ -113,15 +116,20 @@ const MainAppContent: React.FC = () => {
 
       {/* FLOATING DEV MODE BADGE */}
       {DEV_MODE && (
-        <div 
-          className="fixed bottom-24 right-6 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-slate-900/90 dark:bg-slate-950/90 text-rose-500 border border-rose-500/20 shadow-lg shadow-rose-500/10 backdrop-blur select-none"
-          title="HostBoard bypassed login state for fast local iterations."
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-          <span>DEV MODE ACTIVE</span>
+        <div className="fixed bottom-28 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 z-50 pointer-events-none">
+          <div className="flex justify-end">
+            <div 
+              className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-slate-900/90 dark:bg-slate-950/90 text-rose-500 border border-rose-500/20 shadow-lg shadow-rose-500/10 backdrop-blur select-none"
+              title="HostBoard bypassed login state for fast local iterations."
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <span>DEV MODE ACTIVE</span>
+            </div>
+          </div>
         </div>
       )}
 
+      </div>
     </div>
   );
 };

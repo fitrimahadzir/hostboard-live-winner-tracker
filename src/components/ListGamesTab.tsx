@@ -171,13 +171,17 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
       )}
 
       {/* MOBILE PORTRAIT FLOATING LAUNCH CONTAINER ACTION */}
-      <button
-        id="floating-create-game"
-        onClick={onRequestCreateGame}
-        className="fixed bottom-24 right-5 z-40 p-4 rounded-full text-white tiktok-gradient-primary shadow-xl shadow-rose-500/20 active:scale-95 transition-transform cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/10"
-      >
-        <Plus size={22} strokeWidth={2.5} />
-      </button>
+      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 z-40 pointer-events-none">
+        <div className="flex justify-end">
+          <button
+            id="floating-create-game"
+            onClick={onRequestCreateGame}
+            className="pointer-events-auto p-4 rounded-full text-white tiktok-gradient-primary shadow-xl shadow-rose-500/20 active:scale-95 transition-transform cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/10"
+          >
+            <Plus size={22} strokeWidth={2.5} />
+          </button>
+        </div>
+      </div>
 
     </div>
   );
