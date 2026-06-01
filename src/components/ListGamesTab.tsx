@@ -242,7 +242,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
                 className="w-full py-3 text-xs font-bold text-white bg-slate-600 hover:bg-slate-700 disabled:opacity-50 rounded-xl shadow-lg focus:outline-none flex items-center justify-center gap-1.5"
               >
                 <Download size={13} />
-                <span>{exportingId === deleteTarget ? 'Saving...' : 'Save CSV'}</span>
+                <span>{exportingId === deleteTarget ? 'Saving...' : 'Save as Excel(CSV)'}</span>
               </button>
               <div className="flex gap-2">
                 <button
