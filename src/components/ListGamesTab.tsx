@@ -174,7 +174,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800 font-bold text-[10px] text-slate-400 uppercase shrink-0">
                   <span className="text-rose-500 font-extrabold">
-                    {game.game_type.substring(0, 3)}
+                    {game.title.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div className="min-w-0">
