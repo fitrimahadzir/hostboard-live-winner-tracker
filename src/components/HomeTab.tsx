@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { DEV_MODE } from "../config/env";
 import { dbService } from "../lib/supabase";
@@ -28,6 +28,25 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   const { user, games, isSupabaseConnected, deleteGame, addToast } = useApp();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exportingId, setExportingId] = useState<string | null>(null);
+  const [topWinner, setTopWinner] = useState<{ username: string; wins: number } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const findTopWinner = async () => {
+      let top: { username: string; wins: number } | null = null;
+      for (const game of games) {
+        const players = await dbService.players.fetchAllForGame(game.id);
+        for (const p of players) {
+          if (!top || p.wins > top.wins) {
+            top = { username: p.username, wins: p.wins };
+          }
+        }
+      }
+      if (!cancelled) setTopWinner(top);
+    };
+    findTopWinner();
+    return () => { cancelled = true; };
+  }, [games]);
 
   const handleExportCSV = async (gameId: string) => {
     setExportingId(gameId);
@@ -75,8 +94,6 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   const totalGames = games.length;
 
   // Simulated stats for nicer live representation on dashboard
-  const sampleBestPerformance =
-    games.length > 0 ? games[0].title : "No rounds started";
   const statusBadge = isSupabaseConnected
     ? "Live Syncing"
     : "Offline Mode";
@@ -165,22 +182,22 @@ export const HomeTab: React.FC<HomeTabProps> = ({
           </div>
         </div>
 
-        {/* Highest Active Performance */}
+        {/* Most Win Viewer */}
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 p-4 rounded-3xl shadow-sm flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-              Best Live Round
+              Most Win Viewer
             </span>
-            <div className="p-1.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/20 text-cyan-500">
+            <div className="p-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/20 text-amber-500">
               <Star size={16} />
             </div>
           </div>
           <div className="mt-3 overflow-hidden">
             <h3 className="text-sm font-bold truncate text-slate-900 dark:text-white">
-              {sampleBestPerformance}
+              {topWinner ? `@${topWinner.username}` : '—'}
             </h3>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5 truncate">
-              Latest Live Round
+              {topWinner ? `${topWinner.wins} win${topWinner.wins > 1 ? 's' : ''} across all rounds` : 'No winners yet'}
             </p>
           </div>
         </div>
