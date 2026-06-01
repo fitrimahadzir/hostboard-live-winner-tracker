@@ -18,6 +18,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('All');
   const [sortByNewest, setSortByNewest] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   // Filter and sort core logic
   const filteredGames = games
@@ -161,7 +162,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
                   id={`delete-lobby-btn-${game.id}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    deleteGame(game.id);
+                    setDeleteTarget(game.id);
                   }}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/10 transition-colors focus:outline-none"
                 >
@@ -170,6 +171,45 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
+          <div className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] p-6 max-w-sm w-full z-10 text-center select-none space-y-4 shadow-2xl">
+            <div className="inline-flex p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-500">
+              <Trash2 size={24} />
+            </div>
+            
+            <div className="space-y-1.5">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Delete Game Room?</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+                This action is <strong>irreversible</strong>. All players and scores for this room will be permanently removed.
+              </p>
+            </div>
+
+            <div className="flex gap-2.5 pt-2">
+              <button
+                id="delete-cancel"
+                onClick={() => setDeleteTarget(null)}
+                className="flex-1 py-3 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                id="delete-confirm"
+                onClick={() => {
+                  deleteGame(deleteTarget);
+                  setDeleteTarget(null);
+                }}
+                className="flex-1 py-3 text-xs font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-lg focus:outline-none"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
