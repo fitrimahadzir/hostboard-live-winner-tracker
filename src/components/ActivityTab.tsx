@@ -144,48 +144,54 @@ export const ActivityTab: React.FC = () => {
         </p>
       </div>
 
-      {/* FILTER BUTTON TAB BAR */}
-      <div className="flex gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 border border-slate-250/20 rounded-2xl overflow-x-auto no-scrollbar">
+      {/* FILTER BUTTON TAB BAR — ICONS ONLY, LABEL SHOWN ON ACTIVE */}
+      <div className="flex justify-center">
+        <div className="inline-flex gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+          className={`group flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
             filter === 'all' 
               ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow' 
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          All Activity
+          <LayoutGrid size={16} />
+          <span className={filter === 'all' ? '' : 'hidden group-hover:inline'}>All Activity</span>
         </button>
         <button
           onClick={() => setFilter('wins')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+          className={`group flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
             filter === 'wins' 
               ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow' 
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          Wins 🏆
+          <Award size={16} />
+          <span className={filter === 'wins' ? '' : 'hidden group-hover:inline'}>Wins</span>
         </button>
         <button
           onClick={() => setFilter('games')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+          className={`group flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
             filter === 'games' 
               ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow' 
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          Round Actions 🎮
+          <Gamepad2 size={16} />
+          <span className={filter === 'games' ? '' : 'hidden group-hover:inline'}>Games</span>
         </button>
         <button
           onClick={() => setFilter('system')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+          className={`group flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
             filter === 'system' 
               ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow' 
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          System ⚙️
+          <Zap size={16} />
+          <span className={filter === 'system' ? '' : 'hidden group-hover:inline'}>System</span>
         </button>
+        </div>
       </div>
 
       {/* CORE CARDS LIST AREA */}
