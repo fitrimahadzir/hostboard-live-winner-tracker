@@ -324,6 +324,30 @@ export const ProfileTab: React.FC = () => {
         )}
       </div>
 
+      {/* SUPPORT SECTION */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] p-5 shadow-sm space-y-3">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/20 text-blue-500">
+            <HeartHandshake size={16} />
+          </div>
+          <div>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              Support
+            </h4>
+            <p className="text-[10px] text-slate-400">
+              Reach out for help or feedback
+            </p>
+          </div>
+        </div>
+        <a
+          href="mailto:admin@fitrimahadzir.my"
+          className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          <Mail size={14} />
+          admin@fitrimahadzir.my
+        </a>
+      </div>
+
       {/* LOG OUT ACTION */}
       <button
         id="profile-logout-btn"
