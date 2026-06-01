@@ -1,0 +1,6 @@
+{
+  "name": "HostBoard",
+  "description": "A mobile-first live tracking system for TikTok LIVE host streamers to record player wins, manage rounds, and sync real-time leaderboard graphics directly to OBS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
