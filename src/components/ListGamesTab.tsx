@@ -125,11 +125,16 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
               id={`game-lobby-card-${game.id}`}
               key={game.id}
               onClick={() => onSelectGame(game.id)}
-              className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl px-4 py-3 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-between gap-3"
+              className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl px-4 py-3 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.99] transition-all cursor-pointer flex items-center gap-3"
             >
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">
-                {game.game_type}
-              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
+                  {game.title}
+                </p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                  {game.game_type}
+                </p>
+              </div>
 
               <button
                 id={`open-lobby-btn-${game.id}`}
@@ -137,7 +142,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
                   e.stopPropagation();
                   onSelectGame(game.id);
                 }}
-                className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-rose-500 transition-colors focus:outline-none shrink-0"
+                className="flex items-center gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-rose-500 transition-colors focus:outline-none shrink-0"
               >
                 <span>Go to</span>
                 <ChevronRight size={13} />
