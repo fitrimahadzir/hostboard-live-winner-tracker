@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { DEV_MODE } from "../config/env";
+import { dbService } from "../lib/supabase";
 import md5 from "md5";
 import {
   Trophy,
@@ -11,6 +12,7 @@ import {
   ChevronRight,
   PlayCircle,
   Trash2,
+  Download,
 } from "lucide-react";
 import { Game } from "../types";
 
@@ -23,8 +25,51 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   onSelectGame,
   onRequestCreateGame,
 }) => {
-  const { user, games, isSupabaseConnected, deleteGame } = useApp();
+  const { user, games, isSupabaseConnected, deleteGame, addToast } = useApp();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exportingId, setExportingId] = useState<string | null>(null);
+
+  const handleExportCSV = async (gameId: string) => {
+    setExportingId(gameId);
+    try {
+      const targetGame = games.find((g) => g.id === gameId);
+      const players = await dbService.players.fetchAllForGame(gameId);
+
+      if (players.length === 0) {
+        addToast(`No scores logged for "${targetGame?.title || 'Unknown'}"`, 'info');
+        return;
+      }
+
+      const headers = ['Rank', 'Player Username', 'Wins/Score', 'Created Timestamp'];
+      const rows = players.map((p, index) => [
+        index + 1,
+        `@${p.username}`,
+        p.wins,
+        new Date(p.created_at).toLocaleString(),
+      ]);
+
+      const csvContent =
+        'data:text/csv;charset=utf-8,' +
+        [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute(
+        'download',
+        `LIVEReport_${targetGame?.title.replace(/\s+/g, '_') || 'Game'}_${new Date().toISOString().slice(0, 10)}.csv`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      addToast('Leaderboard exported to CSV!', 'success');
+    } catch {
+      addToast('CSV export failed', 'error');
+    } finally {
+      setExportingId(null);
+    }
+  };
 
   // Calculate live stats
   const totalGames = games.length;
@@ -236,13 +281,22 @@ export const HomeTab: React.FC<HomeTabProps> = ({
               </p>
             </div>
 
-            <div className="flex gap-2.5 pt-2">
+            <div className="flex gap-2 pt-2">
               <button
                 id="home-delete-cancel"
                 onClick={() => setDeleteTarget(null)}
                 className="flex-1 py-3 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl focus:outline-none"
               >
                 Cancel
+              </button>
+              <button
+                id="home-delete-export-csv"
+                onClick={() => handleExportCSV(deleteTarget!)}
+                disabled={exportingId === deleteTarget}
+                className="flex-1 py-3 text-xs font-bold text-white bg-slate-600 hover:bg-slate-700 disabled:opacity-50 rounded-xl shadow-lg focus:outline-none flex items-center justify-center gap-1.5"
+              >
+                <Download size={13} />
+                <span>{exportingId === deleteTarget ? 'Saving...' : 'Save CSV'}</span>
               </button>
               <button
                 id="home-delete-confirm"
