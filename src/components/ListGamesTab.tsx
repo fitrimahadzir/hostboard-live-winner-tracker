@@ -234,33 +234,35 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
               </p>
             </div>
 
-            <div className="flex gap-2 pt-2">
-              <button
-                id="delete-cancel"
-                onClick={() => setDeleteTarget(null)}
-                className="flex-1 py-3 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl focus:outline-none"
-              >
-                Cancel
-              </button>
+            <div className="space-y-2.5 pt-2">
               <button
                 id="delete-export-csv"
                 onClick={() => handleExportCSV(deleteTarget!)}
                 disabled={exportingId === deleteTarget}
-                className="flex-1 py-3 text-xs font-bold text-white bg-slate-600 hover:bg-slate-700 disabled:opacity-50 rounded-xl shadow-lg focus:outline-none flex items-center justify-center gap-1.5"
+                className="w-full py-3 text-xs font-bold text-white bg-slate-600 hover:bg-slate-700 disabled:opacity-50 rounded-xl shadow-lg focus:outline-none flex items-center justify-center gap-1.5"
               >
                 <Download size={13} />
                 <span>{exportingId === deleteTarget ? 'Saving...' : 'Save CSV'}</span>
               </button>
-              <button
-                id="delete-confirm"
-                onClick={() => {
-                  deleteGame(deleteTarget);
-                  setDeleteTarget(null);
-                }}
-                className="flex-1 py-3 text-xs font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-lg focus:outline-none"
-              >
-                Delete
-              </button>
+              <div className="flex gap-2">
+                <button
+                  id="delete-cancel"
+                  onClick={() => setDeleteTarget(null)}
+                  className="flex-1 py-3 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl focus:outline-none"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="delete-confirm"
+                  onClick={() => {
+                    deleteGame(deleteTarget);
+                    setDeleteTarget(null);
+                  }}
+                  className="flex-1 py-3 text-xs font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-lg focus:outline-none"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
