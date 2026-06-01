@@ -35,7 +35,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
     : "Offline Mode";
 
   return (
-    <div className="space-y-6 pb-24 md:pb-6">
+    <div className="space-y-6 pb-24">
       {/* Welcome Hero header */}
       <div className="bg-gradient-to-br from-slate-900 to-rose-950 text-white rounded-[2rem] p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none" />

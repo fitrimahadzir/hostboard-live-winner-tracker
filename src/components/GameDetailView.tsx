@@ -128,7 +128,7 @@ export const GameDetailView: React.FC<GameDetailViewProps> = ({
   const overlayHref = `#/overlay/${gameId}`;
 
   return (
-    <div className="space-y-6 pb-32 md:pb-12 text-left select-none relative">
+    <div className="space-y-6 pb-32 text-left select-none relative">
       
       {/* DIRECT NAVIGATION HEADER */}
       <div className="flex items-center justify-between">
@@ -380,11 +380,11 @@ export const GameDetailView: React.FC<GameDetailViewProps> = ({
       )}
 
       {/* STICKY MAIN ACTION BUTTON IN PORTRAIT */}
-      <div className="fixed bottom-20 left-0 right-0 px-4 md:px-0 md:absolute md:bottom-2 md:left-2 md:right-2 z-30 pointer-events-none">
+      <div className="fixed bottom-24 left-0 right-0 px-4 z-30 pointer-events-none">
         <button
           id="detail-add-winner-trigger"
           onClick={() => setIsAddWinnerOpen(true)}
-          className="pointer-events-auto w-full md:max-w-md mx-auto py-4 rounded-2xl text-sm font-bold text-white tiktok-gradient-primary shadow-xl shadow-rose-500/25 active:scale-95 transition-transform flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/20"
+          className="pointer-events-auto w-full mx-auto py-4 rounded-2xl text-sm font-bold text-white tiktok-gradient-primary shadow-xl shadow-rose-500/25 active:scale-95 transition-transform flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/20"
         >
           <Plus size={18} strokeWidth={2.5} />
           <span>Add Game Winner</span>

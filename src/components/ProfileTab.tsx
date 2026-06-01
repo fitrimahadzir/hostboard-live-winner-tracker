@@ -151,7 +151,7 @@ export const ProfileTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-24 md:pb-6 text-left select-none">
+    <div className="space-y-6 pb-24 text-left select-none">
       {/* HEADER SECTION */}
       <div>
         <h2 className="text-lg font-bold text-slate-950 dark:text-white">

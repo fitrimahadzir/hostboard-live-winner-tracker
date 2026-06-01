@@ -49,7 +49,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
           
           {/* Backdrop Overlay */}
           <motion.div
@@ -68,10 +68,10 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 1 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative w-full md:max-w-md bg-white dark:bg-slate-900 rounded-t-[2.5rem] md:rounded-[2rem] shadow-2xl border-t md:border border-slate-100 dark:border-slate-800 p-6 md:p-7 z-10 select-none pb-12 md:pb-7"
+            className="relative w-full bg-white dark:bg-slate-900 rounded-t-[2.5rem] shadow-2xl border-t border-slate-100 dark:border-slate-800 p-6 z-10 select-none pb-12"
           >
             {/* Drag Handle Indicator for Mobile Bottom Sheet */}
-            <div className="w-12 h-1 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-5 md:hidden" />
+            <div className="w-12 h-1 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-5" />
 
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2.5">

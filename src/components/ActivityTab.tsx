@@ -115,7 +115,7 @@ export const ActivityTab: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-24 md:pb-6 select-none relative animate-fade-in">
+    <div className="space-y-6 pb-24 select-none relative animate-fade-in">
       
       {/* Primary Hero Header */}
       <div className="bg-gradient-to-br from-slate-900 to-rose-950 text-white rounded-[2rem] p-6 shadow-xl relative overflow-hidden">
@@ -206,7 +206,7 @@ export const ActivityTab: React.FC = () => {
 
           {/* Quick simulation buttons when local sandbox triggers are handy */}
           {DEV_MODE && (
-            <div className="mt-8 flex flex-col md:flex-row gap-2 w-full justify-center max-w-sm">
+            <div className="mt-8 flex flex-col gap-2 w-full justify-center max-w-sm">
               <button
                 onClick={() => handleInsertSampleLog('wins')}
                 className="px-3.5 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-500 dark:text-rose-400 border border-rose-100 dark:border-rose-900/45 rounded-xl text-[10px] font-bold uppercase transition-all"

@@ -50,7 +50,7 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans pb-16 md:pb-0 md:pl-64">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans pb-16">
       
       {/* Toast Notification Container */}
       <ToastContainer />
@@ -66,7 +66,7 @@ const MainAppContent: React.FC = () => {
       />
 
       {/* CORE DISPLAY STAGE */}
-      <main className="flex-1 max-w-lg md:max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 md:py-8">
+      <main className="flex-1 max-w-lg mx-auto w-full px-4 py-6">
         <Routes>
           
           {/* Main dashboard tab matching dispatcher */}
@@ -114,7 +114,7 @@ const MainAppContent: React.FC = () => {
       {/* FLOATING DEV MODE BADGE */}
       {DEV_MODE && (
         <div 
-          className="fixed bottom-20 md:bottom-6 right-6 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-slate-900/90 dark:bg-slate-950/90 text-rose-500 border border-rose-500/20 shadow-lg shadow-rose-500/10 backdrop-blur select-none"
+          className="fixed bottom-24 right-6 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-slate-900/90 dark:bg-slate-950/90 text-rose-500 border border-rose-500/20 shadow-lg shadow-rose-500/10 backdrop-blur select-none"
           title="HostBoard bypassed login state for fast local iterations."
         >
           <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />

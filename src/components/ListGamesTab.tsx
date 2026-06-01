@@ -34,7 +34,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
     });
 
   return (
-    <div className="space-y-4 pb-28 md:pb-6 relative select-none">
+    <div className="space-y-4 pb-28 relative select-none">
       
       {/* HEADER ROW */}
       <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-5 rounded-[2rem] shadow-sm">
@@ -174,7 +174,7 @@ export const ListGamesTab: React.FC<ListGamesTabProps> = ({
       <button
         id="floating-create-game"
         onClick={onRequestCreateGame}
-        className="md:hidden fixed bottom-20 right-5 z-40 p-4 rounded-full text-white tiktok-gradient-primary shadow-xl shadow-rose-500/20 active:scale-95 transition-transform cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/10"
+        className="fixed bottom-24 right-5 z-40 p-4 rounded-full text-white tiktok-gradient-primary shadow-xl shadow-rose-500/20 active:scale-95 transition-transform cursor-pointer focus:outline-none focus:ring-4 focus:ring-rose-500/10"
       >
         <Plus size={22} strokeWidth={2.5} />
       </button>
