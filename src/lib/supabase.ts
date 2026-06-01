@@ -13,9 +13,17 @@ export const isSupabaseConfigured =
   supabaseAnonKey && 
   supabaseAnonKey.length > 50; // Anon keys are typically very long strings
 
+// Fetch wrapper with 15s timeout so requests don't hang forever
+const fetchWithTimeout: typeof fetch = (url, options) => {
+  return fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
+};
+
 // Initialize real Supabase client client-side on access
 export const supabase = isSupabaseConfigured 
-  ? createClient(supabaseUrl, supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      global: { fetch: fetchWithTimeout },
+      realtime: { transport: WebSocket },
+    })
   : null;
 
 // --- DUAL-MODE SERVICE REPOSITORY ---
